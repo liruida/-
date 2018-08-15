@@ -1,0 +1,174 @@
+接收数字
+#include <stdio.h>
+int main(void){
+    int a,b,c;
+    printf("input a,b,c\n");
+    scanf("%d%d%d",&a,&b,&c);
+    printf("a=%d,b=%d,c=%d",a,b,c);
+    return 0;
+}
+
+接收单字符
+#include <stdio.h>
+int main(void){
+ char a,b;
+ printf("input character a,b\n");
+ scanf("%c %c",&a,&b);
+ printf("\n%c%c\n",a,b);
+ system("pause");
+ return 0;
+}
+
+接收一维数字数组
+#include <stdio.h>//主函数
+main()
+{
+int A[10],i,j;//定义数组名与变量名
+int length = sizeof(A) / sizeof(A[0]);
+printf("输入11个数字、回车键确定：\n");
+for (i=0;i<length;i++)//遍历录入数组元素
+{
+scanf("%d",&A[i]);
+}
+printf("输出数组元素：\n");//遍历输出数组元素
+for(j=0;j<length;j++)
+{
+printf("%d	",A[j]);
+system("pause");
+
+}
+}
+
+接收一维单字符数组 即字符串
+注：A[3]结尾会有"\0",提示输入4个，如1234或asdf，但会接收123或asd.
+
+#include <stdio.h>//主函数
+main()
+{
+char A[3],i,j;//定义数组名与变量名 
+int length = sizeof(A) / sizeof(A[0]);
+printf("%d",length);  // 长度3 a[0] a[1] a[2] 
+printf("输入3个字符、回车键确定：\n");
+for (i=0;i<length;i++)//遍历录入数组元素
+{
+scanf("%c\n",&A[i]);
+}
+
+for(j=0;j<length;j++)
+{
+printf("%c",A[j]);
+system("pause");
+
+}
+}
+接收二维数组
+#include "stdio.h"
+#define N 100
+int main()
+{
+ int i;
+ int j;
+ int n;
+ int a[N][N];
+
+
+  printf("Input n:");
+ scanf("%d",&n);
+    printf("Input a[i][j]:"); 
+ for(i = 0; i < n; i++)
+ {
+  for(j = 0; j < n; j++) //j<?,?处自定义
+  {
+   scanf("%d", &a[i][j]);
+  }
+  system("pause");
+  
+ }
+ for(i = 0;i < n; i++)
+ {
+  for(j = 0;j < n; j++)
+  {
+   printf("%d ",a[i][j]);
+  }
+  printf("\n");
+  system("pause");
+ }
+  printf("%d ",a[1][1]);
+  system("pause");
+  
+ return 0;
+}
+
+
+题目：
+数列的第一项为n，以后各项为前一项的平方根，求数列的前m项的和.
+
+#include "stdio.h"
+#include <math.h>
+#define N 100
+int main()
+{
+ int i;
+ int j;
+ int n;
+ int a[N][2];
+
+
+  printf("Input n 输入几组:");
+ scanf("%d",&n);
+    printf("Input a[i][j]:"); 
+ for(i = 0; i < n; i++)
+ {
+  for(j = 0; j < 2; j++)
+  {
+   scanf("%d", &a[i][j]);
+  }
+  system("pause");
+  
+ }
+  double sum[N]={0.0};
+  double temp=0.0;
+  
+    int h,g;
+    for(h=0;h<n;h++){
+       temp=a[h][0];
+        for(g=0;g<a[h][1];g++){
+              printf("%d ",h);
+               printf("%d ",g);
+              sum[h]+=temp;
+              temp=sqrt(temp);
+               printf("%d ",sum[h]); 
+        }
+    }
+    int r;
+  for(r=0;r<n;r++){
+        printf("最终结果为:");            
+     
+        printf("%.2f\n",sum[r]);
+       
+        system("pause");
+  }
+ return 0;
+}
+
+
+#include<stdio.h>
+#include<math.h>
+ 
+int main()
+{
+    int n,m;
+    double sum=0.0,temp;
+    scanf("%d%d",&n,&m);
+    temp=n;
+    int i;
+    for(i=1;i<=m;i++)
+    {
+        sum+=temp;
+        temp=sqrt(temp);
+         
+    }
+    printf("%.2f\n",sum);
+    system("pause");
+    return 0;
+}
