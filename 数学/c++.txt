@@ -1,0 +1,127 @@
+接收数字 单字符 
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    char a;
+    int b;
+    float c;
+    string 
+    cin>>a>>b>>c;
+    cout<<a<<" "<<b<<" "<<c<<" "<<endl;
+
+    system("pause");
+    return 0;
+}
+
+接收一维数字数组
+#include <iostream>
+using namespace std;
+int main( )
+{
+int a[11];
+int i, j, t;
+cout<<"input 3 numbers ："<<endl;
+for (i=1;i<4;i++) //输入a[1]~a[10]
+cin>>a[i];
+
+
+for(i=1;i<4;i++) //输出10个数
+cout<<a[i]<<" ";
+system("pause");
+
+return 0;
+}
+
+接收一维单字符数组 即字符串
+注：a[10]结尾会有"\0",10个元素，a[0]到a[9],a[9]是“\0” 输入10个，但会接收9个.
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+
+{
+         int i;
+         
+         char a[10];
+         int length=sizeof(a) / sizeof(a[0]);
+         cin.get(a,10);
+         cout<<length<<endl;
+         cout<<a[2]<<endl;
+         for(i=0;i<length;i++) {
+           cout<<a[i]<<" ";
+           }
+
+         system("pause");
+         return 0;
+
+}
+
+       
+接收二维数组
+#include <iostream>
+#define N 100
+using namespace std;
+
+int main()
+
+{
+ int i;
+ int j;
+ int n;
+ int a[N][N];
+
+cout<<"Input n ："<<endl;
+
+ cin>>n;
+    cout<<"Input a[i][j]:"<<endl; 
+ for(i = 0; i < n; i++)
+ {
+  for(j = 0; j < n; j++) //j<?,?处自定义
+  {
+   cin>>a[i][j];
+  }
+  system("pause");
+  
+ }
+ for(i = 0;i < n; i++)
+ {
+  for(j = 0;j < n; j++)
+  {
+      cout<<a[i][j]<<" ";
+   
+ 
+  }
+
+  system("pause");
+ }
+ 
+  cout<<a[1][1]<<" ";
+  system("pause");
+ return 0;
+}
+
+
+题目：
+数列的第一项为n，以后各项为前一项的平方根，求数列的前m项的和.
+
+#include<iostream>
+#include"math.h"
+#include <iomanip> 
+using namespace std;
+int main(){
+    int m;
+    double n,sum=0;
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+    sum+=n;
+    n=sqrt(n);
+}
+    cout<<fixed<< setprecision(2)<<sum;
+    system("pause");
+    return 0;
+}
+
