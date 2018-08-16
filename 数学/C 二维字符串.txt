@@ -1,0 +1,24 @@
+#include <stdio.h>
+#define maxn 105
+char pic[maxn][maxn];
+ 
+int main()
+{
+    int i;
+	for ( i = 0;i < 3;i++)//按照行读取，每行可有多个字符 
+	scanf("%s",pic[i]);
+	char *str=pic[1];
+	while(*str!='\0'){
+                      *str='x';
+                      str++;
+                      }
+	
+
+	for (i = 0;i < 3;i++)
+	printf("%s",pic[i]);  
+	
+	
+    system("pause");
+	
+	
+ }
