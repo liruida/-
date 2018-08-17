@@ -1,0 +1,87 @@
+c函数
+#include <stdio.h>
+#include <string.h>
+int add(int n){
+    if(n<=1){
+            return 1; 
+             }
+     int k=0;
+     k++;
+     k+=add(n-1);  //内部递归调用
+     return n;        
+             }
+int main(){
+       int result=add(5);
+       
+       printf("%d""\n",result);//输出5而不是1
+	    
+		system("pause");
+    return 0;
+}
+
+C++
+#include <iostream>
+using namespace std;
+int add(int n){
+    if(n<=1){
+            return 1; 
+             }
+     int k=0;
+     k++;
+     k+=add(n-1);
+     return n;        
+             }
+int main(){
+       int result=add(5);
+       
+       cout<<result<<endl;  //输出5
+		system("pause");
+    return 0;
+} 
+	
+指针函数
+供理论学习	
+#include <iostream>
+using namespace std;
+int add(int a,int b){
+    return a+b;
+}
+int main(){
+    int (*pf)(int,int);
+    pf=add;
+   int sum=pf(1,1);
+    cout<<sum<<endl; //输出2
+    system("pause");
+    
+    return 0; 
+    } 
+C++类
+#include <iostream>
+using namespace std;
+
+class CT
+{ 
+     public: int a; 
+}; 
+class CB 
+{ 
+     public: int b; 
+}; 
+CT* fun(CB* CCB)
+{ 
+     CT* CCT = new CT(); 
+     CCT->a = CCB->b; 
+     return CCT; 
+} 
+int main() 
+{ 
+       CB* CCB = new CB(); 
+       CT* CCT= fun(CCB); 
+       if(CCB!=NULL)
+        system("pause");
+        delete CCB; 
+       if(CCT!=NULL) 
+	     system("pause");
+       delete CCT ;
+       return -1; 
+} 

@@ -1,0 +1,133 @@
+接收字符串 数字  
+
+# -*- coding:utf-8 -*-
+x =input("输入x：")   #input函数返回的是字符串
+y = input("输入y：")
+sum = x + y             #两个字符串拼接
+print("和：", sum)   #输出拼接得到的字符串
+
+
+x = int(x)
+y = int(y)
+sum = x + y
+print("和：", sum)  #输出x+y的和
+
+#输入矩形长和宽，求出面积
+fx = float(input("输入矩形宽度："))  #float()函数把字符串转换为浮点数
+fy = float(input("输入矩形长度："))
+print("矩形面积：", fx * fy)
+
+
+
+接收一维数字数组
+# -*- coding:utf-8 -*-
+x=input("输入示例：'1,2,3'输入：         ")
+xlist=x.split(",")
+xlist = [int(xlist[i]) for i in range(len(xlist))] #for循环,把每个字符转成int值
+print(xlist) 
+for i in range(len(xlist)):         // len(xlist) :list的长度
+        print i,xlist[i]
+
+
+
+	
+
+接收一维单字符数组 即字符串
+
+循环出字符串x的每个字母:
+
+# -*- coding:utf-8 -*-
+str =input("输入字符串x：")
+for i in range(len(str)) :
+     print(str[i])
+str=str.replace("is", "x", 3);//更改原理：重新创建了一个新串  函数说明文档//http://www.runoob.com/python/att-string-replace.html
+print(str)
+ 
+range 在 for 中的使用:
+range(10)        # 从 0 开始到 10
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+range(1, 11)     # 从 1 开始到 11
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+range(0, 30, 5)  # 步长为 5
+[0, 5, 10, 15, 20, 25]
+range(0, -10, -1) # 负数
+[0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
+range(0)
+[]
+range(1, 0)
+[]
+
+控制语句示例：
+# -*- coding: UTF-8 -*-
+for语句
+for num in range(10,20):  # 迭代 10 到 20 之间的数字
+   for i in range(2,num): # 根据因子迭代
+      if num%i == 0:      # 确定第一个因子
+         j=num/i          # 计算第二个因子
+         print '%d 等于 %d * %d' % (num,i,j)
+         break            # 跳出当前循环
+   else:                  # 循环的 else 部分
+      print num, '是一个质数'
+
+while语句
+# -*- coding: UTF-8 -*- 
+count = 0
+while (count < 9):
+   print 'The count is:', count
+   count = count + 1
+ 
+print "Good bye!"
+       
+接收二维数组
+# -*- coding: UTF-8 -*-
+n=int(input())
+line=[[0]*n]*n
+for i in range(n):
+    line[i]=input().split(' ')
+print(line)
+
+for i in range(0,n):
+    for j in range(0,n):
+        print (line[i][j])
+
+
+输入：
+"2"
+"1 2"
+"3 4"
+输出：
+[['1', '2'], ['3', '4']]
+
+
+
+# -*- coding: UTF-8 -*-
+n=int(input())
+m=int(input())
+line=[[0]*m]*n
+for i in range(n):
+    line[i]=input().split(' ')
+print(line)
+for i in range(0,n):
+    for j in range(0,m):
+        line[i][j]=int(line[i][j])  //遍历过程中字符串转数字
+print(line[0][:])                   //数组即list 切片
+输入：
+"2"
+"2"
+"1 2"
+"3 4"
+
+输出：
+[['1', '2'], ['3', '4']]
+
+[1, 2]
+
+二维数组转一维数组：
+
+a = [[1,2,3], [5, 8], [7,8,9]]
+l=[]
+for m in range(0,3):
+    for i in a[m]:
+        l.append(i)
+print(l)
+[1, 2, 3, 5, 8, 7, 8, 9]

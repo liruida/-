@@ -1,0 +1,30 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+
+{
+    int i,j;
+    int b[2][4]={0};
+        int a[4];
+        for(i=0;i<4;i++){
+                a[i]=2;
+                         }
+           for(i=0;i<4;i++){
+                   cout<<a[i]<<endl;          
+                            }  
+          for(i=0;i<4;i++){
+                  b[0][i]=a[i];        
+                            }                                      
+    
+        for(i=0;i<2;i++){
+          for(j=0;j<4;j++){
+              cout<<b[i][j];
+                    }
+              cout<<"\n";
+            }
+    system("pause");
+    return 0;
+
+}
