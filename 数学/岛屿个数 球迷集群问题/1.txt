@@ -1,0 +1,89 @@
+问题描述：
+
+有一个M*N的二维球场看台，已知同一个球迷群体的球迷会选择相邻座位，不同球迷群体的球迷选择不相邻的座位。给定座位选择矩阵（0表示未选择，1表示已选择），要求找出球迷群体的个数以及最大的球迷群体的人数。
+
+（相邻包括前后、左右相邻）
+
+#include <iostream>
+#include<vector>
+using namespace std; 
+using std::vector;
+class Solution 
+{
+    public:
+        int iszero(int matrix[],int (&flags)[12],int x,int y,int rows, int cols)
+    {
+       
+        if(x<0 || x>=rows || y<0 || y>=cols){ //越界的点
+            return 0; 
+           }      
+        
+         
+ 
+        if(flags[x*cols+y]==0&&matrix[x*cols+y]== 1 )//0表示未被访问 
+        {
+            int n=1;                                     
+           flags[x*cols+y]=1;
+        
+            n+=iszero(matrix,flags,x,y-1,rows,cols) +
+                iszero(matrix,flags,x-1,y,rows,cols)+
+                iszero(matrix,flags,x,y+1,rows,cols)+
+                iszero(matrix,flags,x+1,y,rows,cols);           
+           
+                      
+            return n;             
+        } else{
+            flags[x*cols+y]=1;
+            return 0;   
+        }          
+        
+ }
+ 
+      int hasPath(int  matrix[], int rows, int cols,int *condition,int *sum)
+    {
+         
+       int flags[12]={0};
+     
+        
+        for(int i=0;i<rows;i++)
+            for(int j=0;j<cols;j++)
+            {
+             int temp=0;
+              temp=iszero(matrix,flags,i,j,rows,cols) ;
+              
+            
+              cout <<"temp:"<<temp << endl;
+                       system("pause"); 
+              
+                      
+              if(temp>0){
+                         
+                    (*condition)++; 
+                     cout <<"*condition:"<<*condition << endl;   
+                     if(temp>*sum){*sum=temp;}
+                     cout <<"*sum:"<<*sum << endl;  
+                         }  
+            }
+       return 0;      
+    }
+
+   
+};
+ 
+int main()
+{
+   int num=0;
+    int length=0;
+   
+    int matrix[]={0,0,1,1,0,0,1,1,1,0,0,1};
+    Solution  M;        
+   int condition=0;
+   int sum=0;
+   M. hasPath(matrix,3,4,&condition,&sum); 
+      cout << *(&condition) << endl;
+      cout << *(&sum) << endl;
+      system("pause");
+      
+    return 0;
+}
+

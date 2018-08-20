@@ -1,0 +1,52 @@
+#include <iostream> 
+
+using namespace std; 
+
+int* sum(int a,int b,int *last)
+{
+	int q=a^b;
+    cout << q << endl;
+	cout << (a&b) << endl;
+	int p=(a&b)<<1;
+	cout << p << endl;
+	if(p!=0&&q!=0)
+	{
+		return sum(p,q,last);
+	}
+	else
+	{
+        cout << q <<""<< endl;
+        cout << p <<""<< endl;
+       
+		if(q!=0){
+		cout << "q值  :" <<q<< endl;
+	     int k=q;
+	          *last =k;
+           *last =q;
+        cout << "last值：  " <<*last<< endl;
+	        
+			return last;
+        }
+		else{
+           cout << "p值  :" <<q<< endl;
+           int k=p;
+			*last =k;
+		*last =p;
+	       cout << "last值：  " <<*last<< endl;
+			return last;
+        }
+	}
+}
+
+int main (void)
+{ 
+    int a,b; 
+    int last=0;
+    cin >> a >> b;
+    int* w;
+    w=sum(a,b,&last);
+    cout << w << endl; 
+    cout << *w << endl; 
+    system("pause");
+    return 0; 
+}

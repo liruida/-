@@ -1,0 +1,61 @@
+#include <iostream> 
+
+using namespace std; 
+
+int sum(int a,int b)
+{
+
+	if(b==0)
+	{
+            return a;
+            }
+            
+       int p=a^b;
+       cout << p << endl;
+
+	   int q=(a&b)<<1;
+	   cout << q << endl;
+       return sum(p,q);
+	
+	
+	}
+
+int main (void)
+{ 
+    int a,b; 
+    int last=0;
+    cin >> a >> b;
+     int w;
+    w=sum(a,b);
+    cout << w << endl; 
+    system("pause");
+    return 0; 
+}
+递归的效率有时不高，转换成迭代
+
+#include <iostream> 
+
+using namespace std; 
+
+int add2(int a, int b) {
+    int sum = 0, carry = 0;
+    while (b) {
+        sum = a ^ b;
+        carry = (a & b) << 1;
+        a = sum;
+        b = carry;
+    }
+    return a;
+}
+int main (void)
+{ 
+    int a,b; 
+   
+    cin >> a >> b;
+  
+    int w=add2(a,b);
+    cout << w << endl; 
+    
+    system("pause");
+    return 0; 
+}
