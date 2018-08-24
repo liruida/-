@@ -1,0 +1,754 @@
+
+在函数内部通过静态方式定义的数组 int a[]={0}是局部变量在栈上，当函数运行结束时就会销毁，若此时返回首地址a且用指针int* t接收，t[i]访问到的数组已经不存在，却能访问到此地址上，返回的是随机数或原地址上的未被覆盖的数据。此问题会导致回溯法中若采用状态数组记录时，会导致状态记录丢失。
+
+C++ QVector(数组)、QLinkedList(链表)、QMap(映射表)、QHash(哈希表)  Vector在遇到此情景时，在返回地址前会调用拷贝构造函数，但依然在栈上，但直到主程序结束才销毁。
+
+
+另一个解决解决方法是在函数内声明时用new方法，将其定义在堆上。需要在合适的地方手动进行销毁。
+
+静态声明的变量 数组 对象在栈上，new 动态创建在堆上，Java反射原理同new（只不过通过JVM类加载器加载字符串封装了）故其创建的对象也在堆上。堆栈静态区都是可以放数据或指针的，静态区数据在所有程序结束后才销毁。
+
+以下是一些测试程序及其原理不明下的各种奇怪输出。
+#include <iostream>
+#include<vector>
+
+using namespace std; 
+int* add(int a,int b){
+    int c=0;
+    c=a+b;
+    cout<<&c;
+    return &c;
+    
+    }
+ 
+int main()
+{
+      int* a=add(1,2);
+      cout << *a << endl;
+
+
+
+错误程序 1：
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() 
+{ 
+  
+   
+    int a = 10;
+    
+    int *t=&a;
+   return t; 
+} 
+int* change(int *x) //这个是改变值的函数
+{
+  *x=3;
+  cout<<*x<<endl;  //输出3
+  return x;
+
+}
+int main()
+{
+int*p=a();
+cout<<*p<<endl;   //输出10
+
+int* f=change(p); //地址的传递 
+cout<<*f<<endl;  //输出4398624
+
+system("pause");
+return 0;
+}
+
+错误程序 2：
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() 
+{ 
+  
+   
+     int a = 10;
+    
+    int *t=&a;
+   return t; 
+} 
+void change(int **x) //这个是改变值的函数
+{
+  **x=3;        //输出3
+  cout<<**x<<endl; 
+
+}
+int main()
+{
+int*p=a();
+cout<<*p<<endl;  //输出10
+int **t=&p; 
+
+change(t); //地址的传递 
+cout<<a<<endl;   //输出1
+system("pause");
+return 0;
+}
+
+
+
+错误程序3：
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+class Solution 
+{
+    public:
+int * a() 
+{ 
+   int a[2] = {0,1};
+    
+    int *t=a;
+    
+    change(t);
+     cout<<a[0]<<a[1]<<endl;  //输出 398 45 
+         
+    return t;
+
+} 
+void  change(int *x) //这个是改变值的函数
+
+{
+  x[0]=398;
+  x[1]=45;
+
+  
+
+}
+};
+int main()
+{
+    Solution  M;    
+    int* a=M.a();
+   
+    cout<<a[0]<<a[1]<<endl;  //输出 398 0
+     
+    system("pause");
+    return 0;
+}
+
+错误程序4：
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() //这里面定义一个一维数组 并 返回其首地址
+{ 
+  
+  
+   int c[3] = {13660,11};
+    
+   return c; 
+} 
+void change(int *x) //这个是改变值的函数
+{
+ 
+ 
+ 
+ x[0]=x[0]+1;
+x[1]=x[1]+1;
+
+}
+int main()
+{
+int*p=a();
+cout<<p[0]<<" "<<p[1]<<endl; //输出 13600  11
+change(p);
+cout<<p[0]<<" "<<p[1]; //输出 13600 11
+system("pause");
+return 0;
+}
+
+
+正确程序 1:
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+class Solution 
+{
+    public:
+int * a() 
+{ 
+   int a = 10;
+    
+    int *t=&a;
+    //int *t=new int;
+    //*t=10;
+    change(t);
+    return t;
+
+} 
+void  change(int *x) //这个是改变值的函数
+{
+  *x=3;
+
+  
+
+}
+};
+int main()
+{
+    Solution  M;    
+    int* a=M.a();
+    cout<<*a<<endl; 
+    system("pause");
+    return 0;
+}
+
+正确程序2：
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+class Solution 
+{
+    public:
+int * a() 
+{ 
+   int a = 10;
+    
+    int *t=&a;
+    //int *t=new int;
+    //*t=10;
+    int *q=change(t);
+    return q;
+
+} 
+int*  change(int *x) //这个是改变值的函数
+{
+  *x=3;
+  cout<<*x<<endl; 
+  return x;
+
+}
+};
+int main()
+{
+    Solution  M;    
+    int* a=M.a();
+    cout<<*a<<endl; 
+    system("pause");
+    return 0;
+}
+      cout<<&(*a);
+      system("pause");
+      
+    return 0;
+    
+    
+   
+  
+  
+}
+
+#include <iostream>
+#include<vector>
+
+using namespace std; 
+int* add(){
+    int c[3]={0};
+    c[2]=100;
+
+    return c;
+    
+    }
+ 
+int main()
+{
+      int* a=add();
+      cout << a[0] << endl;
+ 
+      system("pause");
+      
+    return 0;
+    
+    
+   
+  
+  
+}
+
+#include <iostream>
+#include<vector>
+
+using namespace std; 
+int* add(){
+    int *c;
+    c=new int[3];
+    c[2]=100;
+
+    return c;
+    
+    }
+ 
+int main()
+{
+      int* a=add();
+      cout << a[2] << endl;
+ 
+      system("pause");
+      
+    return 0;
+    
+    
+   
+  
+  
+}
+
+
+
+
+
+#include <iostream>
+#include<vector>
+using namespace std; 
+int updata(int arr[5],int n){
+    for(int i=0;i<n;i++){
+    arr[i]=2;
+   }
+  return 0;
+    }
+
+int main(){
+    int arr[5]={0};
+   updata(arr,5);
+    for(int i=0;i<5;i++){
+      cout << arr[i] << endl;
+      system("pause");
+            
+    
+   }
+    }
+输出 22222
+
+#include <iostream>
+#include<vector>
+using namespace std; 
+void getstr(char * buffer)
+{
+char str[] = "hello world";
+strcpy(buffer, str);
+}
+int main()
+{
+char a[100];
+getstr(a);
+printf("%s", a);
+ system("pause");
+}
+输出 hello world
+
+
+package a;
+
+public class updata {
+	public  void updata(int arr[],int n){
+		 for(int i=0;i<5;i++){
+             arr[i]=2;
+	}
+	
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+          updata u=new updata();
+          int []arr1=new int[5];  // int []arr1={0,0,0,0,0};
+          for(int i=0;i<5;i++){
+              arr1[i]=0;
+ 	}
+          u.updata(arr1,5);
+          for(int i=0;i<5;i++){
+             System.out.println(arr1[i]);
+                    
+            
+           } 
+          
+          }
+	
+
+}
+
+输出 22222
+
+
+#include <iostream>
+#include<vector>
+using namespace std; 
+int updata(int arr[5],int n){
+    for(int i=0;i<n;i++){
+    arr[i]=2;
+   }
+  return 0;
+    }
+
+int main(){
+    int arr[5]={0};
+   updata(arr,5);
+    for(int i=0;i<5;i++){
+      cout << arr[i] << endl;
+      system("pause");
+            
+    
+   }
+    }
+输出 22222
+
+#include <iostream>
+#include<vector>
+using namespace std; 
+void getstr(char * buffer)
+{
+char str[] = "hello world";
+strcpy(buffer, str);
+}
+int main()
+{
+char a[100];
+getstr(a);
+printf("%s", a);
+ system("pause");
+}
+输出 hello world
+
+
+package a;
+
+public class updata {
+	public  void updata(int arr[],int n){
+		 for(int i=0;i<5;i++){
+             arr[i]=2;
+	}
+	
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+          updata u=new updata();
+          int []arr1=new int[5];  // int []arr1={0,0,0,0,0};
+          for(int i=0;i<5;i++){
+              arr1[i]=0;
+ 	}
+          u.updata(arr1,5);
+          for(int i=0;i<5;i++){
+             System.out.println(arr1[i]);
+                    
+            
+           } 
+          
+          }
+	
+
+}
+
+输出 22222
+
+
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() 
+{ 
+  
+   
+    int a = 10;
+    
+    int *t=&a;
+   return t; 
+} 
+void change(int *x) //这个是改变值的函数
+{
+  *x=3;
+  cout<<*x<<endl; 
+
+}
+int main()
+{
+int*p=a();
+cout<<*p<<endl;  
+
+change(p); //地址的传递 
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+输出 10 3 1
+
+
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() 
+{ 
+  
+   
+    
+    int *p=new int;
+    *p=10;
+ 
+   return p; 
+} 
+void change(int *x) //这个是改变值的函数
+{
+  *x=3;
+  cout<<*x<<endl; 
+  cout<<&x<<endl; 
+
+}
+int main()
+{
+int*p=a();
+cout<<*p<<endl;  
+
+change(p); //地址的传递 
+cout<<*p<<endl; 
+cout<<&p<<endl; 
+free(p);
+system("pause");
+return 0;
+}
+输出 10 3 0x28ff30  3 0x28ff44
+
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() 
+{ 
+  
+   
+     int a = 10;
+    
+    int *t=&a;
+   return t; 
+} 
+void change(int **x) //这个是改变值的函数
+{
+  **x=3;
+  cout<<**x<<endl; 
+
+}
+int main()
+{
+int*p=a();
+cout<<*p<<endl; 
+int **t=&p; 
+
+change(t); //地址的传递 
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+
+输出 10 3 1
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int main (){
+int a=3;
+int *t=&a;
+int *m=t;//int **m=&t; 
+*m=6;//**m=6;
+cout<<a<<endl;
+cout<<*t<<endl;
+cout<<*m<<endl;//cout<<**m<<endl;
+cout<<&a<<endl;
+cout<<&t<<endl;
+cout<<&m<<endl;
+system("pause");
+return 0;
+}
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() //这里面定义一个一维数组 并 返回其首地址
+{ 
+  
+   //static int c[5] = {0,1,2,3,4};
+   /*int* c;
+    c = new int[5];
+    for(int i=0;i<5;i++){
+          c[i]=i;
+            }*/
+   int c[3] = {13660,11};
+    cout <<"&c"<< &c << endl;
+   cout <<"&c[3]"<< (&c)[3] << endl;
+   cout <<"&c[0]"<< &c[0] << endl;
+   cout <<"&c[1]"<< &c[1] << endl;
+   cout <<"&c[2]"<< &c[2] << endl;
+   
+   return c; 
+} 
+void change(int *x) //这个是改变值的函数
+{
+  cout <<"&x"<< &x << endl;   
+  int* pp=x;
+  cout <<"&pp"<< &pp << endl;
+  cout <<"&pp[0]"<< &pp[0] << endl;
+pp[0]=pp[0]+1;
+
+cout <<"&pp[0]"<< &pp[0] << endl;
+pp[1]=pp[1]+1;
+cout <<"&pp[1]"<< &pp[1] << endl;
+cout <<"&pp[2]"<< &pp[2] << endl;
+}
+int main()
+{
+int*p=a();
+cout<<p[0]<<" "<<p[1]<<p[2]<<endl; //显示 改变前的值 显示结果 0，1 正确
+//cout<<"*p":  <<*p<<endl;
+
+cout<<"&p: "<<&p<<endl;
+cout <<"&p[0]"<< &p[0] << endl;
+
+cout <<"&p[1]"<< &p[1] << endl;
+cout <<"&p[2]"<< &p[2] << endl;
+change(p); //地址的传递 
+cout<<p[0]<<" "<<p[1]; //显示改变后的值 想要达到的显示结果 但是显示错误 }
+system("pause");
+return 0;
+}
+
+输出 13660 11  4425216 4399600
+
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+int* a() //这里面定义一个一维数组 并 返回其首地址
+{ 
+  
+   
+   int* c;
+    c = new int[5];
+    for(int i=0;i<5;i++){
+          c[i]=i;
+            
+}
+
+   cout<<(&c)<<endl;
+   return c; 
+} 
+void change(int *x) //这个是改变值的函数
+{
+ 
+  int* pp=x;
+  
+pp[0]=pp[0]+1;
+
+
+pp[1]=pp[1]+1;
+
+}
+int main()
+{
+int*p=a();
+
+cout<<&p<<endl;
+
+cout<<p[0]<<" "<<p[1]<<endl; //显示 改变前的值 显示结果 0，1 正确
+change(p); //地址的传递 
+cout<<p[0]<<" "<<p[1]; //显示改变后的值 
+delete []p;
+
+system("pause");
+return 0;
+}
+
+输出  0 1
+      1 2
+
+
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+class Solution 
+{
+    public:
+int * a() 
+{ 
+   int a = 10;
+    
+    int *t=&a;
+    //int *t=new int;
+    //*t=10;
+    int *q=change(t);
+    return q;
+
+} 
+int*  change(int *x) //这个是改变值的函数
+{
+  *x=3;
+  cout<<*x<<endl; 
+  return x;
+
+}
+};
+int main()
+{
+    Solution  M;    
+    int* a=M.a();
+    cout<<*a<<endl; 
+    system("pause");
+    return 0;
+}
+输出 3 3
+
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+class Solution 
+{
+    public:
+int * a() 
+{ 
+   int a = 10;
+    
+    int *t=&a;
+    //int *t=new int;
+    //*t=10;
+    change(t);
+    return t;
+
+} 
+void  change(int *x) //这个是改变值的函数
+{
+  *x=3;
+
+  
+
+}
+};
+int main()
+{
+    Solution  M;    
+    int* a=M.a();
+    cout<<*a<<endl; 
+    system("pause");
+    return 0;
+}
+
+输出 3
+
+

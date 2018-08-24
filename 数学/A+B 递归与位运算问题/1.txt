@@ -17,8 +17,8 @@ int sum(int a,int b)
 	cout << p << endl;
 	if(p!=0&&q!=0)
 	{
-		int u= sum(p,q);
-		return u;    //若不写return,程序回到递归开始处，结束；随机返回一个值。 
+		  return sum(p,q);
+		  //若不写return,程序回到递归开始处，结束；随机返回一个值。 
 	}
 	else
 	{
