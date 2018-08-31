@@ -1,0 +1,75 @@
+解 见图片 1.jpg~ 3.jpg 
+
+输入:
+6
+2 1 5 6 2 3
+
+输出:
+10
+
+此法为动态规划
+#include<iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int solve(vector<int >data)
+{
+	int len = data.size();
+	int max_area=0;
+	for (int i = 0; i < len;i++)
+	{
+		int left_index = 0;
+		int right_index = 0;
+		for (; i - left_index >= 0;left_index++)
+		{
+			if (data[i - left_index]<data[i])
+			{
+				break;
+			}
+			
+		}
+		for (; i + right_index <= len - 1; right_index++)
+		{
+			if (data[i + right_index] < data[i])
+			{
+				break;
+			}
+		}
+		int area = (1 + (left_index -1)+ (right_index-1))*data[i];
+		max_area = max(max_area, area);
+	}
+	return max_area;
+}
+int main()
+{
+
+
+	int n;vector<int >data;
+	while (cin>>n)
+	{
+		int temp;
+		for (int i = 0; i < n;i++)
+		{
+			cin >> temp; data.push_back(temp);
+		}
+		int res = solve(data);
+		cout << res << endl;
+		  system("pause");
+		//return 0;
+	}
+	return 0;
+}
+
+单调栈
+
+https://blog.csdn.net/Two_Water/article/details/53004027
+
+https://blog.csdn.net/LaoJiu_/article/details/50839746
+
+
+https://blog.csdn.net/roufoo/article/details/78569554
+
+双端队列（能从两端入，只能从一端出）
+https://jingyan.baidu.com/album/a501d80cf952c1ec630f5ec3.html?picindex=2
+
+https://blog.csdn.net/zlb872551601/article/details/77686651
