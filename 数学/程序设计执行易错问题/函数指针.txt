@@ -1,0 +1,47 @@
+函数指针指将函数首地址被一个指针所指向，实现调指针就可以运行此函数或将函数作为函数参数使用的功能，提高了模块之间信息交互的灵活性。
+例子：
+#include <stdio.h>
+#include <string.h> 
+f(int x,int y)
+
+{
+
+    int z;
+
+    z=(x>y)?x:y;
+
+    return(z);
+
+}
+int main()
+
+{
+
+        int f();
+
+        int i,a,b;
+
+        int (*p)();    /* 定义函数指针 */
+
+        scanf("%d",&a);
+
+        p=f;            /* 给函数指针p赋值，使它指向函数f */
+
+        for(i=1;i<3;i++)
+
+        {
+                scanf("%d",&b);
+
+                a=(*p)(a,b);    /* 通过指针p调用函数f */
+
+        }
+
+        printf("The Max Number is:%d",a);
+        system("pause");
+
+}
+
+
+
+
+指针函数即：返回值是指针类型。哈哈。

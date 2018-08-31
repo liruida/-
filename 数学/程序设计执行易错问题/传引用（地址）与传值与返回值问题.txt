@@ -1,0 +1,150 @@
+https://www.cnblogs.com/zjutzz/p/6818799.html
+以下出品，皆为精品
+
+传引用（地址）
+#include<iostream>
+using namespace std;
+void test(int &a) 
+
+{ 
+  a=2;
+  
+    
+  
+} 
+
+int main()
+{
+int a=1;
+test(a);
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+2
+
+#include<iostream>
+using namespace std;
+void test(int* a) 
+
+{ 
+  *a=2;
+  
+    
+  
+} 
+
+int main()
+{
+int a=1;
+test(&a);
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+2
+
+
+#include<iostream>
+using namespace std;
+void test(int *a) 
+
+{ 
+  *a=2;
+  
+    
+  
+} 
+
+int main()
+{
+
+int a=1;
+int *aa=&a;
+test(aa);
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+
+
+2
+
+传值
+#include<iostream>
+using namespace std;
+void test(int *a) 
+
+{ 
+     int ac=6;
+     a=&ac;
+  
+     
+    
+  
+} 
+
+int main()
+{
+
+int* a=NULL;
+
+test(a);
+cout<<a<<endl; 
+system("pause");
+return 0;
+}
+0
+
+#include<iostream>
+using namespace std;
+int test(int *a) 
+
+{ 
+     int ac=6;
+     a=&ac;
+     
+     return *a;
+    
+  
+} 
+
+int main()
+{
+
+int* a=NULL;
+
+int f=test(a);
+cout<<a<<endl; 
+cout<<f<<endl; 
+system("pause");
+return 0;
+}
+0 6  //return 返回*a的一个拷贝，即6返回，然后a就被销毁了。尽管a被销毁了，但它的副本6还是成功地返回了，这样做没有问题
+
+#include<iostream>
+using namespace std;
+int* test(int *a) 
+
+{ 
+     int ac=6;
+     a=&ac;
+
+     return a;
+    
+  
+} 
+
+int main()
+{
+
+int* a=NULL;
+
+int *f=test(a);
+cout<<a<<endl; 
+cout<<*f<<endl; 
+system("pause");
+return 0;
+}
+0 0 //return a之后 指针a被销毁了，即a指向的内存被回收了，即此处的6是定义在栈上了。在函数外f再去取a的指向内存就会拿到随机或默认初始值0.
+参考 https://blog.csdn.net/xiewenhao12/article/details/79359039   指针为什么不能返回局部指针变量，却可以返回局部变量

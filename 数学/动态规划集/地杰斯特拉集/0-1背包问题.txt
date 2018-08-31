@@ -1,0 +1,80 @@
+/*任务：计算0-1背包问题的最大价值
+Sample Input
+10 4
+2 1
+3 3
+4 5
+7 9
+Sample Output
+12
+0 1 0 1
+*/
+#include<stdio.h>
+#include<string.h>
+int c[20][1000];//c[k][y]为只允许装前k种物品，背包总重量不超过y的最大价值
+int inumber[21][1000];//inumber[k][u]为只允许装前K种物品，背包总重量不超过y时得到最大价值时使用的背包的最大标号
+int w[21],p[21];
+int knapsack(int m,int n)
+{
+	int i,j;
+    for(i=1;i<n+1;i++)
+        scanf("%d%d",&w[i],&p[i]);
+    memset(c,0,sizeof(c));
+	memset(inumber,0,sizeof(inumber));
+	for(j=1;j<m+1;j++){
+		c[1][j]=j/w[1]*p[1];
+	}
+    for(i=1;i<n+1;i++){
+		for(j=1;j<m+1;j++){
+			if(j >= w[i]){
+				if(p[i]+c[i-1][j-w[i]]>=c[i-1][j]){
+					c[i][j]=p[i]+c[i-1][j-w[i]];
+					inumber[i][j]=i;
+				}	
+                else{
+					c[i][j]=c[i-1][j];
+					inumber[i][j]=inumber[i-1][j]; 
+				}
+			}
+			else{
+				c[i][j]=c[i-1][j];
+				inumber[i][j]=inumber[i-1][j]; 
+			}
+		}
+	}
+	return(c[n][m]);                     
+}
+ 
+void trackSolution(int m, int n){
+	int x[21];
+	int y = m;
+	int j = n;
+	memset(x, 0, sizeof(x));
+	while(true){
+		j = inumber[j][y];
+		x[j] = 1;
+		y = y - w[j];
+		while(inumber[j][y] == j){
+			y = y - w[j];
+			x[j]++;
+		}
+		if(!inumber[j][y]) break;
+	}
+	printf("最大价值方案中各个物品的个数为(物品标号从1到n)：");
+	for(j = 1; j <= n; j++){
+		printf("%d ", x[j]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int m,n;
+	while(scanf("%d%d",&m,&n)!=EOF){
+		printf("最大价值为%d\n",knapsack(m,n));
+		trackSolution(m, n);
+	}
+	return 0;
+} 
+
+参考链接：
+https://blog.csdn.net/yangliuy/article/details/7172208

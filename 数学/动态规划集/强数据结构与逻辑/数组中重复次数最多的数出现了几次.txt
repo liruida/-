@@ -1,0 +1,129 @@
+使用map映射表，通过引入map表来记录每一个元素出现的次数。map是STL的一个关联容器，它提供一对一的数据处理能力，其中第一个为关键字，每个关键字只能在map中出现一次，第二个称为该关键字的值，map的初始化值全部为0.
+设定初始状态时重复次数最多val（作为map的value）。对目标数组中的每一个元素都与当前的最大重复次数即m[a[i]]作比较，若大于等于val，那val就该换为最大重复次数。这样一轮循环过后，就能找出重复次数最大为多少了即是val为最大重复次数。但通过val不能反求key。
+
+亦可设定初始状态时重复次数最多的数为key（作为map的key），那么它的出现次数就为map[key]。对目标数组中的每一个元素都与当前的最大重复次数，即map[key]作比较，若大于等于map[key]，那val就该换为该元素了。这样一轮循环过后，就能找出重复次数最多的元素了为key。最大重复次数为map[key]。代码改动处：
+if (m[a[i]] >= m[key])
+        val = a[key]；
+
+
+
+#include <iostream>
+#include <map>
+using namespace std;
+ 
+bool findMostFrequentInArray(int *a, int size, int &val)
+{
+    if (a == NULL || size <= 0)
+        return false;
+    map<int, int> m;
+    for (int i = 0; i < size; i++)
+    {
+        m[a[i]]++;
+        if (m[a[i]] >= val)
+        val = m[a[i]];
+        //cout << a[i]<<m[a[i]] << endl;
+    }
+    return true;
+}
+int main()
+{
+    int val = 0;
+    int a[] = { 1, 5, 4, 3, 4, 4, 5, 4, 5, 5,5, 6 };
+    if (findMostFrequentInArray(a, 12, val))
+        cout << val << endl;
+        
+    getchar();
+    system("pause");
+    return 0;
+}
+参考链接：
+http://www.cnblogs.com/cysolo/p/3585857.html
+
+另一种解法是：
+另外开辟一个等长数组C，遍历原数组过程中，其值存 C[A[i]]++;(A为原数组)，则例如 
+原下标： 0 1 2 3 4 5 6 7
+原数组： 2 3 3 5 3 4 1 7
+新下标： 2 3 3 5 3 4 1 7
+新数组： 1 1 2 1 3 1 1 1 
+（新空间）
+重复最大次数为3，重复的数为其下标 3。
+
+下面空间复杂度为O(1)的算法仍是这个思想，借助了k(k>=max（数组的最大值）)加的方法，通过新下标指向旧下标（遍历中的i），知道调用了哪个新下标，控制加k的次数，k的大小消除了通过旧下标获得所加值的影响。
+
+以上两种解法均借助了外部空间，时间复杂度为0（n），空间复杂度为0（k）或O(n)。而空间复杂度为0（1）的含义是就地运行，所谓就地运行，指不借助任何外部空间，运行数据内存加原数据内存=原数据内存大小。例如，堆排序的空间复杂度为0（1）。
+堆排序通过简单的交换就能把数据就地排成堆，不需要辅助空间。
+堆和原数据是一体的。堆和未处理/已排序数据的大小加起来正好是原数据的大小。
+
+
+下面的解法的时间复杂度为O(n), 空间复杂度为O(1)。
+
+原理解读：
+下标   i：                          0  1     2       3     4     5       6     7 
+原数组arr[]：                       2  3     3       5     3     4       1     7
+
+产生新数组下标:                     2   3     3       5      3     4       1    7
+用原数组的值 arr[i]%k（等效i））
+
+新数组的值arr(arr[i]%k)+k :        11  13    21     12     29     11      11   15
+遍历，在旧数组空间上进行修改即可  (3+8)(5+8)(5+8+8)(4+8) (5+8+8+8) (3+8) (3+8)  (7+8)
+
+则最终被修改后的arr[]中，因为下标为0处没有改，仍为原值2；下标为3处的数据被三次修改，13，21，最终为29.所以arr若按i从0到7依次遍历则为： 2 11 29 11 11 1 15
+数值最大的29处所对应的下标3即为重复次数最多的数。 令(29-arr[3])/k得到的3即为3出现的次数。arr[i]新坐标i(arr[i]%k),被调用的次数越多，其值越大，注意要想让所加的值k消除原数组值的影响，必须让k值大于或等于原数组的最大值。例如，上例中，如果k仍取8，而数组为 2 2 4 5 100
+原下标      0  1  2   3  4  
+原数组      2  2  4  5  100
+中间值     12 20 108 8  116
+
+新下标      0  1  2  3   4
+改值后的数组 2 2  20  5  116
+
+其最终结果返回4，可见8不足以取消100的影响而生成了错误的值。
+
+数组 arr[] = {2, 3, 3, 5, 3, 4, 1, 7}, k = 8, n = 8.
+遍历数组的元素，使 arr[arr[i]%k] += k 。
+
+arr = {2, 11, 11, 29, 11, 12, 1, 15}, 遍历数组，找到最大元素所对应的index， arr[3]=29, 3就是重复次数最多的元素； 
+
+如果需要还原原数组，那么只需要 arr[i] = arr[i] % k 即可。
+
+
+#include <iostream>
+#include <map>
+using namespace std;
+ 
+int maxRepeating(int* arr, int n, int k)
+{
+    //for every element arr[i], increment arr[arr[i]%k] by k
+    for (int i = 0; i< n; i++){
+     
+        arr[arr[i]%k] += k;
+        cout << "arr[i]%k :"<< arr[i]%k<<"arr[arr[i]%k]: "<<arr[arr[i]%k]<<endl;
+}
+    // Find index of the maximum repeating element
+    int max = arr[0], result = 0;
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max)
+        {
+            max = arr[i];
+            result = i;
+        }
+
+   /*to get the original array back
+     for (int i = 0; i< n; i++)
+        arr[i] = arr[i]%k; 
+   */
+    return result;
+}
+int main()
+{
+    int val = 0;
+    int a[] = { 2, 3, 3, 5, 3, 4, 1, 7 };
+    int res=maxRepeating(a,8,8);
+        cout << res << endl;
+        
+    getchar();//接受一个字符  一般用于接受回车 gcc编译程序，执行发现，把“回车键”也当作是一个字符，这样十分不利于字符数目的统计,用起来也不是很爽，所以要解决这个问题。用getchar（）；https://bbs.csdn.net/wap/topics/350179016 
+    system("pause");
+    return 0;
+}
+
+参考链接：
+https://blog.csdn.net/light_lj/article/details/49387857
