@@ -1,0 +1,196 @@
+
+
+写一段代码，判断一个包括'{','[','(',')',']','}'的表达式是否合法(注意看样例的合法规则。)
+
+给定一个表达式A,请返回一个bool值，代表它是否合法。
+
+测试样例：
+"[a+b*(5-4)]*{x+b+b*(({1+2)}}"
+返回：false
+
+https://www.cnblogs.com/xautxuqiang/p/6443519.html
+
+https://blog.csdn.net/wickedvalley/article/details/72841303
+主要思想：左边括号的数量和右边括号的数量一样就好了
+
+
+
+#include<vector>
+#include<iostream>
+#include<string>
+#include <stack>
+
+using namespace std;
+
+//链接：https://www.nowcoder.com/questionTerminal/227893ccf81d4e8589875922f0d9319e
+
+
+class ChkExpression {
+public:
+    bool chkLegal(string A) {
+        // write code here
+        vector<char> stack;
+        for(int i = 0;i<A.size();i++)
+        {
+            if(A[i] == '{' || A[i] == '(' || A[i] == '[')
+            {
+                stack.push_back(A[i]);
+            }
+            else if(A[i] == '}' || A[i] == ')' || A[i] == ']')
+            {
+                int a = stack.size();
+                if(a < 1)return false;
+                /*if ((stack[a-1] == '(' && A[i] == ')') || (stack[a-1] == '{' && A[i] == '}') || (stack[a-1] == '[' && A[i] == ']'))*/
+                else stack.pop_back();
+            }
+        }
+        if(stack.size()>0)return false;
+        return true;
+    }
+};
+int main()
+{
+    string A = "[a+b*(5-4)]*{x+b+b*{(1+2)}";
+     ChkExpression C;
+    cout << C.chkLegal(A) << endl;
+   	system("pause");
+     return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# -*- coding:utf-8 -*-
+
+def judge(expression):
+        s = Stack()
+        d = {'}':'{', ']':'[', ')':'('}
+        for i in expression:
+                if i == '[' or i == '{' or i == '(':
+                        s.push(i)
+                if i == ']' or i == '}' or i == ')':
+                        #当遍历到后括号时，发现栈里没有数据
+                        #说明表达式有问题
+                        if s.is_empty():
+                                return False
+                        #或者出栈的数据和后括号对应的前括号不一样
+                        #则表达式也有问题
+                        elif s.pop() != d[i]:
+                                return False
+          #遍历玩表达式后，要再次判断一下栈是否为空
+        #如果不为空，说明表达式有问题。
+        if not s.is_empty():
+                return False
+        else:
+                return True
+
+
+class Stack(object):
+        def __init__(self):
+                self._elems = []
+
+        def is_empty(self):
+                return self._elems == []
+
+        def push(self, elem):
+                self._elems.append(elem)
+
+        def pop(self):
+                if self.is_empty():
+                        raise ValueError
+                return self._elems.pop()
+
+        def peek(self):
+                if self.is_empty():
+                        raise ValueError
+                return self._elems[-1]
+
+if __name__ == "__main__":
+        ep = "[a+b*(5-4)]*{x+b+b*{(1+2)}}"
+        ep1 = "[a+b*(5-4)]*{x+b+b*{{(1+2)}}"
+        print(judge(ep))
+        print(judge(ep1))
+
+
+
+
+
+
+
+
+
+
+
+import java.util.*;
+ 
+public class ChkExpression {
+    public boolean chkLegal(String A) {
+        // write code here
+       
+        Stack<Character> stack = new Stack<Character>();
+        HashMap<Character,Character> map = new HashMap<Character,Character>();
+        map.put('[',']');
+        map.put('{','}');
+        map.put('(',')');
+        for(int i =0;i<A.length();i++){
+            char ch = A.charAt(i);
+            if(map.containsKey(ch)){
+                stack.push(ch);
+            }else if(map.containsValue(ch)){
+                if(stack.isEmpty())
+                    return false;
+                char top = stack.peek();
+               // if(map.get(top).equals(ch)){
+                    stack.pop();
+               // }else{
+                //    return false;
+                //}
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+
+
+
+
+https://blog.csdn.net/wickedvalley/article/details/72841303
+
+
+
+
+
+
+https://blog.csdn.net/lhshaoren/article/details/7380008
+http://www.cnblogs.com/wdan2016/p/6509282.html
+Output
+ 如果表达式合法，输入“Yes”，否则输入“No”，然后换行。
+如果表达式为空，则输出一个空行。
+Sample Input
+ -1+2
++-1+2
+
++(-1+2)
+()-23
+Sample Output
+ Yes
+No
+
+Yes
+No
+
+
+
+
+其进阶
+字符串后缀自动机
