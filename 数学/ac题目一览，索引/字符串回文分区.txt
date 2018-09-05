@@ -1,0 +1,49 @@
+给定字符串s，分区s使得分区的每个子字符串都是回文。
+
+返回s的所有可能的回文分区。
+
+例如，给定s =“aab”，
+返回
+
+  [
+    [ “AA”， “B”]，
+    [ “一”， “一个”， “B”]
+  ]
+
+https://www.nowcoder.com/practice/f983806a2ecb4106a17a365a642a9632?tpId=46&tqId=29049&tPage=1&rp=1&ru=/ta/leetcode&qru=/ta/leetcode/question-ranking
+class Solution {
+public:
+    vector<string> store;
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> res;
+        int n=s.size();
+        vector< vector<string> > bin(n);///表示以 字符串i开始的回文串
+ 
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                int k=0;
+                while(i+k<j-k && s[i+k]==s[j-k] )
+                    k++;
+                if(s[i+k]==s[j-k])
+                    bin[i].push_back(s.substr(i,j-i+1));///substr(i,len)求取以i开头 长度为len的字符串
+            }
+        }
+        dfs(0,n,bin,res);
+        return res;
+    }
+    
+    void dfs(int start,int n,vector<vector<string> >&bin,vector<vector<string> >&res ){
+ 
+        if(start>=n){
+            res.push_back(store);
+            return;
+        }
+        vector<string> temp=bin[start];
+        for(int i=0;i<temp.size();i++){
+            store.push_back(temp[i]);
+            dfs(start+temp[i].size(),n,bin,res);
+            store.pop_back();
+        }
+    }
+};
+

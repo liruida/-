@@ -1,0 +1,50 @@
+原理：
+a+b是一个非常简单的问题，基本上是编程初学者在hello world后第二个想去尝试完成的功能，本文将不使用+号及其他算术运算符，采用位运算的方式实现a+b
+
+先举一个十进制加法的例子，比如45+67=112，如果不考虑进位得到的结果是2，只考虑进位得到的结果是110，加起来正好是112，对于二进制其实也是这样的，因此我们可以将加操作和进位操作分开，二进制不进位加法其实就是异或操作，而进位操作实际上就是两个数对应位都为1时的左移，考虑到进位次数有限，当进位为0时，加出来的就是答案了。
+
+
+#include <iostream> 
+
+using namespace std; 
+
+int sum(int a,int b)
+{
+	int q=a^b;
+    cout << q << endl;
+
+	int p=(a&b)<<1;
+	cout << p << endl;
+	if(p!=0&&q!=0)
+	{
+		  return sum(p,q);
+		  //若不写return,程序回到递归开始处，结束；随机返回一个值。 
+	}
+	else
+	{
+        
+     
+       
+		if(q!=0){
+		cout << "q值：  " <<q<< endl;
+	
+			return q;
+        }
+		else{
+             cout << "p值：  " <<p<< endl;
+			return p;
+        }
+	}
+}
+
+int main (void)
+{ 
+    int a,b; 
+    int last=0;
+    cin >> a >> b;
+     int w;
+    w=sum(a,b);
+    cout << w << endl; 
+    system("pause");
+    return 0; 
+}

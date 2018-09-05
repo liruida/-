@@ -1,0 +1,70 @@
+ss请cc来家里钓鱼，鱼塘可划分为n＊m的格子，每个格子有不同的概率钓上鱼，cc一直在坐标(x,y)的格子钓鱼，而ss每分钟随机钓一个格子。问t分钟后他们谁至少钓到一条鱼的概率大？为多少？
+输入描述:
+第一行五个整数n,m,x,y,t(1≤n,m,t≤1000,1≤x≤n,1≤y≤m);
+接下来为一个n＊m的矩阵，每行m个一位小数，共n行，第i行第j个数代表坐标为(i,j)的格子钓到鱼的概率为p(0≤p≤1)
+输出描述:
+输出两行。第一行为概率大的人的名字(cc/ss/equal),第二行为这个概率(保留2位小数)
+
+示例1
+输入
+
+2 2 1 1 1
+0.2 0.1
+0.1 0.4
+输出
+
+equal
+0.20
+
+
+建模：
+2*2四格
+（1,1）（1,2）
+（2,1）（2,2）
+对应概率为：
+  0.2   0.1
+  0.1   0.4
+t作为时间 不应该控制整个程序，应作为一个变量因素。
+CC一直在（1,1），每分钟钓到鱼的概率为0.2；SS每分钟钓到鱼的概率为（0.2+0.1+0.1+0.4）/4=0.2。题目求“至少钓到一条鱼的概率”，其反面是“一条鱼都钓不到”，
+所以CC在t分钟内至少钓到一条鱼的概率为：1-（1-0.2)^t;SS的为1-（1-0.2)^t，二者比较大小即可。程序中pow(x,y)即表示求x的y次方。
+
+#include <iostream>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+ 
+int main(){
+    int n,m,x,y,t;
+    while(cin>>n>>m>>x>>y>>t){
+        double cc=0.0,ss=0.0;
+        double temp;
+        for(int i=1;i<=n;++i){
+            for(int j=1;j<=m;++j){
+                cin>>temp;
+                if(i==x&&j==y){
+                    cc=1-temp;
+                }
+                ss+=temp;
+            }
+        }
+        ss=1-ss/(n*m);
+        cc=1-pow(cc,t);
+        ss=1-pow(ss,t);
+         
+        if(ss>cc)
+             printf("ss\n%.2f\n",ss);
+             
+        else if(cc>ss)
+             printf("cc\n%.2f\n",cc);
+        else if(cc==ss)
+            printf("equal\n%.2f\n",ss);
+         
+   
+         
+    }
+    system("pause");
+    return 0;
+}
+
+题目来源：      
+https://www.nowcoder.com/practice/cac8bc877bbd444c8999d7fd77e5dd89?tpId=49&tqId=29289&tPage=2&rp=2&ru=/ta/2016test&qru=/ta/2016test/question-ranking

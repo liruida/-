@@ -1,0 +1,100 @@
+并查集解岛屿数量问题
+定义状态数组为roots[n*m],均初始化为-1。找到1的坐标为输入，状态数组存id,id是n*x+y，count++；每次只左上右下找四次就行，无需递归，找到1了取出二者roots值比较，不同则置其状态数组置为n*x+y，同时count--，因为下次找到此1时又会加回来。相同则继续。最终count值为岛数，而roots中重复数最多的数(-1不计)就是集群数量最多的个数。 求数组重复数最多的数，动态规划。
+输入：
+3 4 6
+0 2
+0 3
+1 2
+1 3
+2 1
+2 3
+输出：
+2
+
+含义：
+3行4列，为1的点有6个，其坐标为 （0,2），（0,3）......图示即：
+
+0 0 1 1
+0 0 1 1
+0 1 0 1
+
+程序输出为 2 即2个集群
+roots[m*n]输出为 -1 -1 2 2 -1 -1 2 2 -1 9 -1 2 重复最多的正数2有5个，即最大集群数为5.
+求数组重复数最多的数，参见动态规划集 强数据结构 Map。
+
+程序编写注意下标数据控制，易错。m列  输入实例中 0=<m（y）<=3;0=<n（x）<=2;
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include<sstream>       
+#include<string> 
+using namespace std;
+typedef vector<pair<int, int> > RangeList;
+class Solution {
+ public :
+    int numIslands2(int m, int n, RangeList& positions) {
+       int res=0;
+       int cnt = 0 ;
+       vector < int > roots(m * n, - 1 );
+     
+      int dir[8]={0, -1,-1, 0,0, 1,1,0};
+	        for (int i = 0; i < positions.size(); ++i) {
+             int id = m * positions[i] .first + positions[i].second;
+             cout <<"id"<< id<<endl;
+            roots[id] = id;
+              cnt++;
+             for (int j=0;j<8;j++) {
+                 cout<<"j值:"<<j<<endl;
+                 int x = positions[i].first + dir[ j++ ], y = positions[i].second + dir[ j ], cur_id = m * x + y;
+                 cout <<"cur_id"<< cur_id<<endl;
+                 cout << x<<m<<y<<n<<endl;
+                 if (cur_id>m*n-1||cur_id<0||x <  0 || x >= n || y < 0 || y >= m || roots[cur_id] == - 1 ) continue ;
+                  cout <<"roots[cur_id]"<< roots[cur_id]<<endl;
+                 int p = findRoot  (roots, cur_id), q = findRoot(roots , id);
+                 cout << p<<q<<endl;
+                 cout <<"执行到此"<<endl;
+                 if (p != q){ 
+                    roots[q] = p;
+                     cnt--;
+                     }
+                  
+                }
+                  res=res>cnt?res:cnt;
+            for(int i = 0; i <m*n; i++){
+               cout << roots[i]<< ""; 
+               }
+              cout << "_________________"<<endl;  
+        }
+        return res;
+    }
+    int findRoot(vector< int >& roots, int id) {
+         return (id == roots[id]) ? id : findRoot(roots, roots[id]);
+    }
+};
+int main(){
+    RangeList intervals;
+    int m,n,start,end,pointnum;
+    cin>>n>>m>>pointnum;
+    for (int i = 0; i < pointnum; ++i) {
+        cin >> start >> end;
+        intervals.push_back(make_pair(start, end));
+    }
+    Solution M; 
+    int result=M.numIslands2(m,n,intervals);
+ 
+    cout << result<< endl;
+     system("pause");
+    return 0;
+}
+参考链接：
+http://www.cnblogs.com/grandyang/p/5190419.html
+
+https://blog.csdn.net/linside1022/article/details/79402576
+
+寻找数组中重复数最多的数字
+https://blog.csdn.net/u013696062/article/details/38513685
+
+https://blog.csdn.net/u014473112/article/details/54176803
+
+https://blog.csdn.net/tkp2014/article/details/47085661

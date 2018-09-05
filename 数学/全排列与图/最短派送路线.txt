@@ -1,0 +1,72 @@
+package a;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class Whg {
+	private static int times = 0;
+    private static int minCost = Integer.MAX_VALUE;
+ 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+ 
+        // 初始化
+        int N = scanner.nextInt();
+ 
+        boolean[] mark = new boolean[N];
+        Node[] nodes = new Node[N];
+        for (int i = 0; i < N; i ++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            nodes[i] = new Node(x, y);
+        }
+ 
+        // 全排列
+        route(mark, nodes, -1, N, 0, 0);
+        System.out.println(minCost);
+    }
+ 
+    private static class Node {
+        public int x;
+        public int y;
+ 
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+ 
+    }
+ 
+    public static int distance(Node from, Node to) {
+        return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
+    }
+ 
+    private static void route(boolean[] mark, Node[] nodes, int now, int N, int step, int cost) {
+ 
+        // 如果step == N 说明所有点一定都走过了
+        if (step > N) {
+            minCost = Math.min(minCost, cost + Math.abs(nodes[now].x) + Math.abs(nodes[now].y));
+            return;
+        }
+ 
+        if (now >= 0 && mark[now]) return;
+ 
+        if (now >= 0) mark[now] = true;
+ 
+//        System.out.println(step + ": " + cost);
+ 
+        for (int i = 0; i < N; i ++) {
+            route(mark, nodes, i, N, step + 1, cost + (now < 0 ? Math.abs(nodes[i].x) + Math.abs(nodes[i].y) : distance(nodes[i], nodes[now])));
+        }
+ 
+        if (now >= 0) mark[now] = false;
+    }
+
+}
+
+https://blog.csdn.net/zhangzhetaojj/article/details/81270663
+
+https://blog.csdn.net/qq_33872191/article/details/81484843
+https://blog.csdn.net/shuwanghong/article/details/81091966

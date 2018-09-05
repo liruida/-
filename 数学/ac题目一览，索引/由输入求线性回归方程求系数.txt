@@ -1,0 +1,67 @@
+//利用最小二乘法进行线形拟合
+#include"stdio.h"
+#include"math.h"
+#define max_size 100
+void main()
+{
+ float data[max_size][2];
+ //用data数组来存放x,y的值.
+ float x_sum=0,y_sum=0;
+ float x_avg,y_avg;
+ float x,y;
+ float Lxy=0,Lxx=0,Lyy=0;
+ float r;
+ float a,b;
+ int i;
+ int count=0;
+next:
+ printf("输入至少2组x,y的值，输入格式为 x,y");
+ printf("输入 -999,-999 表示输入结束！\n");
+ while(1)
+ {
+  scanf("%f,%f",&x,&y);
+  //实数最好不直接用"=="或"!="比较大小。
+  if(fabs(x+999)==0&&fabs(y+999)==0) break;
+  data[count][0]=x;
+  data[count][1]=y;
+  count++;
+ }
+    for(i=0;i<count;i++)
+ {
+  x_sum=data[i][0]+x_sum;
+  y_sum=data[i][1]+y_sum;
+ }
+ x_avg=x_sum/count;
+ y_avg=y_sum/count;
+    for(i=0;i<count;i++)
+ {
+  Lxy=(data[i][0]-x_avg)*(data[i][1]-y_avg)+Lxy;
+  Lxx=(data[i][0]-x_avg)*(data[i][0]-x_avg)+Lxx;
+  Lyy=(data[i][1]-y_avg)*(data[i][1]-y_avg)+Lyy;
+ }
+ //r用于计算相关系数，相关系数越接近1，表示相关性越好.
+ r=Lxy/sqrt(Lxx*Lyy);
+ if(r>0.5) 
+ {
+      printf("数据的线形关系较好。\n");
+   a=Lxy/Lxx;
+   b=y_avg-a*x_avg;
+ }
+ else
+ {
+  printf("数据的线形关系不好!请重新输入数据!\n");
+  goto next;
+ }
+ printf("线形拟合的结果为:\n");
+ if(fabs(b)==0)
+  printf("y=%3.1fx\n",a);
+ else if(b>0)
+    printf("y=%3.1fx+%3.2f\n",a,b);
+ else if(b<0)
+  printf("y=%3.1fx%3.2f\n",a,b);
+ printf("相关系数为:%3.1f\n",r);
+ system("pause");
+}
+
+参考链接：
+https://wenwen.sogou.com/z/q765571811.htm

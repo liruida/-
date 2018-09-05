@@ -1,0 +1,222 @@
+
+求数组最小值
+#include<iostream>
+using namespace std;
+int main(){
+	int a[7]={9,0,3,6,2,4,3};
+	int temp=0;
+	for(int i=0;i<6;i++){
+           
+         if(a[i]>a[i+1]){   //i最大取6，不要越界
+              temp=temp<a[i+1]?temp:a[i+1];   
+              cout<<"temp： "<<temp<<endl;     
+                         }   
+            
+            }
+	cout<<"最终结果： "<<temp<<endl;
+	system("pause");
+	return 0;
+}
+
+#include <iostream>
+using namespace std;
+int main()
+{
+ int datas[7] = {-1, 2, 3, 4, 5, 6, 7 };
+ int min = 0;
+
+    for(int i = 0; i < 7; ++i) 
+ {
+  if(min > datas[i])
+  {
+   min = datas[i];
+  }
+  
+ }
+
+ cout << min << endl; 
+
+system("pause");
+ 
+    return 0;
+}
+
+输入
+6
+9 3 6 6 2 7
+输出
+4
+含义：
+6个数，不降序列有9； 3 6 6 7；2 7；3 6；......其中不降序列最长长度为4，即是3 6 6 7
+
+解法：
+9 3 6 6 2 7
+先初始化一个与数组等长的记录数组P[n],表示以第n个位置为终点的最长不下降序列的长度;
+初始为1，表示开始最长序列均为自身。
+寻找3之前比其小或等的数，同时要注意比较P[1](P[j])是否小于或等于之前(P[K])P[0]~P[1]的数。例如数组为 9 6 3 2 7时，不比较P[k],会输出3（6,3,2）变成寻找比7小的数有几个的问题。若比较了，则：
+数组arr[j] : 9 6 3 2 7
+P[K]初始值： 1 1 1 1 1
+P[K]变化值： 1 1 1 1 2
+return 2
+2！=1（3处的1，说明3大于它前边的数为0，此时可取的序列为6 7，或3 7，但不可同时取 63。）
+分析认为P[j]不会小于(P[K]),所以只需判断是否相等即可。
+极端例子：
+8 9 6 100 2 99
+1 1 1  1  1 1
+1 2 1  3  1 3
+99处P[K]不会小于100处P[K]
+
+可见P[]数组的状态记录（含递推关系，反应了后来者的先行状态）是由查数组各个数前面比它小的数有几个的问题加上约束小的数序列要求不降的升级后的新问题的解决关键——状态约束数组。
+
+时间复杂度分析：因为共有n个元素要进行计算，每次计算又要查找i次(i从1递增到n),那么时间复杂度就是O(N^2)。
+
+#include<iostream>
+using namespace std;
+int main(){
+	int arr[50];
+	int p[50];
+	int i,max = 0;
+	cin>>i;
+	
+	for(int j=0;j<i;j++){
+		cin>>arr[j];
+		p[j] = 1;
+	}
+
+	for(int j=1;j<i;j++){
+		for(int k=0;k<j;k++){
+                       if(arr[j]>=arr[k]&&p[j]<=p[k]){
+				p[j] = p[k]+1;
+			        max = max>p[j]?max:p[j];
+			}
+		}
+	}
+	cout<<"最终结果： "<<max<<endl;
+	system("pause");
+	return 0;
+}
+
+解法2
+时间复杂度分析：由于f[]对应的C[N]数组里面的数是单调递增的,那么查找的时候可以不用遍历而用二分查找,这样时间复杂度就为O(NlogN).
+
+F[I]：表示以第I个位置为终点(或起点或中间值)的最长不下降序列的长度（看例子更好理解）。其实就是解法1中的P[K]数组。
+对于
+a[]  6 8 7 2 10 
+     1 1 1 1 1
+p[k] 1 2 2 1 3
+p[k]中没有运用等效替代。所以2处是1不是2.
+
+但解法1中没有维护C[N]。
+不用遍历的方法：维护一个单调递增数组。
+
+C[N]是维护的单调递增数组。F[N]是C[N]的长度。每次i++;比较a[i]与维护的数组的C[0]（首元素），C[size-1]尾元素比较，若a[i]<C[0]，更新C[0]为a[i]，C[N]长度不变（等效替代）;a[i]>C[size-1]，C[N]尾元素接上a[i]，长度加1;C[0]<a[i]<C[size-1]，二分查找，将C[N]中第一个大于a[i]的数替换成a[i]，长度不变（等效替代）。举例说明：
+a[]: 6     8      7       2           10
+C[]:(6) （6 8）（6 7）  （2 7 ）   （2 7 10）
+F[]：1     2      2        2            3
+
+a[]: 6     8      7       2           5
+C[]:(6) （6 8）（6 7）  （2 7 ）   （2 5）
+F[]：1     2      2        2          2
+
+a[]: 3     5      8            9              6          2               10
+C[]:(3) （3 5）（3 5 8）  （3 5  8 9）   （2 5 6 9）    （2 5 6 9）   （2 5 6 9 10）
+F[]：1     2      3             3             4            4            5
+例三中，输出5，维护结果为（2 5 6 9 10），而实际为 3 5 8 9 10.其中2等效替代了3，6等效替代了8，因为最终要求的长度是不受影响的。
+
+通过维护一个数组递增解题，想到了一个类似的题—单调栈解矩形最大面积。
+
+#include <iostream>
+#include <string>
+using namespace std;
+const int N = 1001;
+int a[N], C[N], f[N]; // f[i]用于记录a[0最长不降子序列i]的最大长度
+int bsearch(const int *C, int size, const int &a) 
+{
+    cout<<"进入bsearch函数："<<endl;
+    cout<<"size: "<<size  <<" a:  "<< a<<endl;
+    int k=0, r=size-1;
+    while( k <= r ) 
+    {
+        cout<<"k: "<<k  <<" r:  "<< r<<endl;   
+        int mid = (k+r)/2;
+        cout<<"mid: "<<mid<<endl;
+        cout<<"C[mid-1]: "<<C[mid-1]  <<" C[mid]:  "<< C[mid]<<endl;
+        if( a > C[mid-1] && a <= C[mid] ) {
+            
+                           return mid;                             // >&&<= 换为: >= && <
+        }else if( a < C[mid] ){
+               r = mid-1;
+        }else{
+               k = mid+1;
+        }
+    }
+}
+
+int LIS(const int *a, const int &n)
+{
+    int i, j, size = 1;
+    C[0] = a[0]; f[0] = 1;
+    
+    for( i=1; i < n; ++i )
+    {
+       cout<<" C[0]:  "<< C[0]<<endl;  
+       cout<<"i: "<<i  <<" a[i]:  "<< a[i]<<endl; 
+       cout<<"size: "<<size  <<" C[size-1]:  "<<C[size-1]<<endl; 
+        if( a[i] < C[0] ){ 
+            j = 0;
+           cout<<"经过第一重判断的j值:"<<j<<endl; 
+        }else if( a[i] >C[size-1] ) {
+            j = size++; 
+        cout<<"经过第二重判断的j值:"<<j<<endl; 
+       } else {
+              
+            j = bsearch(C, size, a[i]);
+       cout<<"经过第三重判断的j值:"<<j<<endl;
+            }
+        cout<<"j最终值:"<<j<<endl;
+        cout<<"i:"<<i<<"  "<<" a[i]:  "<< a[i]<<endl;   
+        C[j] = a[i]; 
+        cout<<"j:"<<j<<""<<" c[j]:"<<C[j]<<endl;  
+        f[i] = j+1;
+        cout<<"i:"<<i<<"  "<<" f[i]:  "<< f[i]<<endl; 
+        for(int i=0;i<n;i++){cout<<C[i]<<"   "; }
+          cout<<"____________________________"<<endl; 
+    }
+    return size;
+}
+
+int main(void)
+{
+    int data[32];
+    int n;
+ 
+    cin>>n;
+           
+        for(int i=0;i<n;i++){
+            cin>>data[i];
+            }
+        int res=LIS(data,n);    
+        cout<<"result:  "<<res<<endl;
+        system("pause");
+ 
+    return 0;
+}
+原理精解： https://www.cnblogs.com/itlqs/p/5743114.html
+参考链接
+
+https://blog.csdn.net/y1196645376/article/details/41023447
+
+
+
+http://blog.sina.com.cn/s/blog_497350a40100qdeo.html
+
+寻找数组每个数后面比其大的数，类似于选择排序排好序位置之后的每次往后找最小值。时间复杂度大于动态规划。
+
+动态规划 选择教室 https://www.jianshu.com/p/2bf90309467b 
+
+字符串合法性：
+https://blog.csdn.net/weixin_39427526/article/details/77109746
+
+https://blog.csdn.net/wickedvalley/article/details/72841303
+
+https://blog.csdn.net/NichChen/article/details/79688493

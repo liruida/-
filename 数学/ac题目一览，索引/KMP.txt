@@ -1,0 +1,139 @@
+http://www.cnblogs.com/yjiyjige/p/3263858.html
+称T为主串，其指针为 i;P为匹配串,其指针为j。
+
+在常识暴力搜索的基础上根据数据特点在遍历中进行优化。当不匹配时考虑到前边已经匹配到了部分得到一些优化。
+
+使i不变，j改变。j值改变取决于p串特征。
+
+设j从0到length(j)-1位置时j依次要改为的k数组 next[j]。问题转化为此。 
+
+举特例发现规律（从特殊到一般）当ABCABC的C处不匹配时，且与上次k值为2处的C相同，则k=k+1；
+
+当ABCABF的F不匹配时且与上次k值为2处的C不相同，k=next[k](递归)。
+
+j=0;k=0;i++;取上边两种情况依次得出next[j](k),将next[j]传入主程序
+中，时间复杂度由O（T^P）降为 O（T*P）。
+
+其中存在递推公式，最长公共子串与0—1背包问题似之，它们借助的是二维表。
+#include <iostream>
+#include<vector>
+
+using namespace std; 
+using std::vector;
+class Solution 
+{
+    public:
+    int KMP(char* t,int tlength, char* p,int plength) {
+
+
+    int i = 0; // 主串的位置
+
+    int j = 0; // 模式串的位置
+
+    int* next = getNext(p,plength);
+
+    while (i < tlength && j < plength) {
+
+       if (j == -1 || t[i] == p[j]) { // 当j为-1时，要移动的是i，当然j也要归0
+
+           i++;
+
+           j++;
+
+       } else {
+
+           // i不需要回溯了
+
+           // i = i - j + 1;
+
+           j = next[j]; // j回到指定位置
+
+       }
+
+    }
+
+    if (j == plength) {
+
+       return i - j;
+
+    } else {
+
+       return -1;
+
+    }
+
+}
+int* getNext(char* p,int plength) {
+
+    
+    int *next;
+     next = new int[plength];
+
+    next[0] = -1;
+
+    int j = 0;
+
+    int k = -1;
+
+    while (j < plength - 1) {
+
+       if (k == -1 || p[j] == p[k]) {
+
+           if (p[++j] == p[++k]) { // 当两个字符相等时要跳过
+
+              next[j] = next[k];
+
+           } else {
+
+              next[j] = k;
+
+           }
+
+       } else {
+
+           k = next[k];
+
+       }
+
+    }
+
+    return next;
+
+}
+   
+};
+ 
+int main()
+{
+  
+    /*int tlength;
+    int plength;
+    cin>> tlength>> plength;
+    
+     char t[tlength];
+     cin.get(t,tlength);
+     
+     char p[plength];
+     cin.get(p,plength);*/
+    char t[10]="dfSSSaghj"; 
+
+    char p[4]="SSa";    
+    Solution  M;        
+ 
+   
+   //int a=M. KMP(t,tlength,p,plength); 
+   int a=M. KMP(t,10-1,p,4-1); 
+      cout << a << endl;
+      system("pause");
+      
+    return 0;
+    
+    
+   
+   // char t[]="SSSS";
+    //char p[]="SSS";
+     // int tlength=sizeof(t) / sizeof(t[0]); 
+     //int tlength=strlen(t);
+  
+}
+

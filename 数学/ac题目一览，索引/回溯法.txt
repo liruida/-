@@ -1,0 +1,122 @@
+/**
+用一个状态数组保存之前访问过的字符，然后再分别按上，下，左，右递归
+*/
+//所谓的回溯无非就是对使用过的字符进行标记后和处理后的去标记
+
+矩阵中的路径:请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则之后不能再次进入这个格子。 例如 a b c e s f c s a d e e 这样的3 X 4 矩阵中包含一条字符串"bcced"的路径，但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+
+
+#include <iostream>
+#include<vector>
+using namespace std;
+using std::vector;
+class Solution 
+{
+    public:
+        bool isPath(char *matrix,vector<char> flags,char* str,int x,int y,int rows, int cols)
+    {
+        if(x<0 || x>=rows || y<0 || y>=cols) //越界的点
+            return false;     
+ 
+        if( matrix[x*cols+y]== *str  &&  flags[x*cols+y]==0 )
+        {
+            flags[x*cols+y]=1;
+            vector<char>::iterator itr; 
+        for (itr = flags.begin() ;itr != flags.end();++itr)//从第一个打印到最后一个
+	{
+		cout<< *itr<<endl;
+	    
+	}
+	system("pause");
+ 
+            if(*(str+1)==0)  // 字符串结尾了（最后一个满足的）
+                return true;
+ 
+            bool condition =isPath(matrix,flags,(str+1),x,y-1,rows,cols) ||
+                isPath(matrix,flags,(str+1),x-1,y,rows,cols)||
+                isPath(matrix,flags,(str+1),x,y+1,rows,cols)||
+                isPath(matrix,flags,(str+1),x+1,y,rows,cols);           
+            if(condition == false)
+                flags[x*cols+y]=0;
+            return condition;             
+        }           
+        else
+            return false;
+ 
+ 
+ 
+ 
+    }
+      bool hasPath(char* matrix, int rows, int cols, char* str)
+    {
+         
+        vector<char> flags(rows*cols,0);
+     
+        bool condition=false;
+        for(int i=0;i<rows;i++)
+            for(int j=0;j<cols;j++)
+            {
+                condition= (condition || isPath(matrix,flags,str,i,j,rows,cols) );
+            }
+        return condition;    
+    }
+ 
+   
+};
+ 
+int main()
+{
+   
+    char *str="bf";
+    char *matrix="abtgcfcsjde";
+    Solution  M;        
+    bool condition=M. hasPath(matrix,3,4,str); 
+      cout << condition << endl;
+      system("pause");
+      
+    return 0;
+}
+或（方法在类定义中，一般不要求给出main函数，有利于自动化测试 ）
+int main()
+{
+    int m,n,k;
+    cin>>m>>n>>k;
+
+ 
+    //char str[]="bfcedjca";//char *str="bfcedjca";
+    if(m*n<k){
+              return 0;
+              }
+    char str[k];
+    cin.get(str,k);
+    
+  
+   cout <<str<< endl;
+    //char matrix[13]="abtgcfcsjde";//char *matrix="abtgcfcsjde";
+    char matrix[m*n+1];
+    cin.get(matrix,m*n+1);
+    cout <<matrix<< endl;
+    //char str[]="abfgggggg";//char *str="bfcedjca";
+   
+  // char matrix[13]="abtgcfcsjde";//char *matrix="abtgcfcsjde";
+   system("pause");
+    Solution  M;        
+    bool condition=M. hasPath(matrix,m,n,str); 
+      cout << condition << endl;
+      system("pause");
+      
+    return 0;
+}
+输入示例：3 4 3abtabtgcfcsjdeh
+输出：1
+
+
+八皇后问题：
+回溯法 位运算或全排列
+
+回溯法是针对结果的一种动态规划。
+一般的动态规划是对过程有递推公式的二维表维护规划。
+
+坎1 控制流程 栈与变量的内存收分取值
+坎2 math法（动态规划 贪心 与题目本身性质有关）+坎3
+坎3 引进的数据结构（如动态规划需要状态数组  广度优先借助队列 深度优先借助栈 需要引进的数据结构与数据结构本身性质和题目需要有关）
