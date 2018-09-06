@@ -1,0 +1,107 @@
+本题解法中，题目特征适用于回溯深度搜索，不适合广度搜索。
+本题中将转向问题划归为逻辑rotate（）函数控制，在judge（）的四个if中，作为方向的参数写死固定与广度优先遍历中用循环控制搜索路径来进行判断有异曲同工之妙；map[x][y + 1] = 1是标记已经访问过，map[x][y + 1] = 0是如果上下左右都不能走通时的回溯，重置0，同时curr亦需重置回来，借助judge（）头部的int record = curr，curr = record；if (x == dx && y == dy)是递归的出口；curr，times作为全局变量，在judge（）内自动修改，而不用返回，有指针带回值之风。以上知识点汇集回溯法，深度搜索遍历，递归控制与指针传值，方向转向的数学逻辑分析，实乃题中集大成者。
+
+注意： 本程序中输入的r表示列，c表示行。
+package a;
+
+import java.util.Scanner;
+
+public class main {
+	public static int times = Integer.MAX_VALUE;//一个常量  int的最大值。也就是01111111 111111111111111111111111,如果+1 则为10000000 00000000 00000000 00000000,为负数 Integer.min_value 
+	public static int curr = 0;
+	public static int dx = 0;
+	public static int dy = 0;
+	public static int ds = 0;
+	public static int r = 0;
+	public static int c = 0;
+
+	public static void main(String[] arg) {
+		System.out.println("输入：");
+		Scanner in = new Scanner(System.in);
+		while (in.hasNext()) {
+			times = Integer.MAX_VALUE;
+			curr = 0;
+
+			int x = in.nextInt();
+			int y = in.nextInt();
+			int s = transform(in.next());
+
+			dx = in.nextInt();
+			dy = in.nextInt();
+			ds = transform(in.next());
+
+			r = in.nextInt();
+			c = in.nextInt();
+
+			int[][] map = new int[r][c];
+			for (int i = 0; i < r; i++)
+				for (int j = 0; j < c; j++)
+					map[i][j] = in.nextInt();
+			for (int i = 0; i < r; i++)
+				for (int j = 0; j < c; j++)
+			System.out.print(map[i][j]);
+
+			judge(x, y, s, map);
+			times = (times == Integer.MAX_VALUE) ? 65535 : times;
+			System.out.println(times);
+		}
+		in.close();
+	}
+
+	public static int transform(String str) {
+		int result = -1;
+		if ("EAST".equals(str))
+			result = 0;
+		else if ("SOUTH".equals(str))
+			result = 1;
+		else if ("WEST".equals(str))
+			result = 2;
+		else if ("NORTH".equals(str))
+			result = 3;
+		return result;
+	}
+
+	public static int rotate(int s, int d) {
+		int t = Math.abs(s - d);
+		return Math.min(t, 4 - t);
+	}
+
+	public static void judge(int x, int y, int s, int[][] map) {
+		if (x == dx && y == dy) {
+			curr += rotate(s, ds);
+			if (curr < times)
+				times = curr;
+			return ;
+		}
+		int record = curr;
+		if (y + 1 < c && map[x][y + 1] == 0) {
+			curr += rotate(s, 0) + 1;
+			map[x][y + 1] = 1;
+			judge(x, y + 1, 0, map);
+			map[x][y + 1] = 0;
+			curr = record;
+		}
+		if (x + 1 < r && map[x + 1][y] == 0) {
+			curr += rotate(s, 1) + 1;
+			map[x + 1][y] = 1;
+			judge(x + 1, y, 1, map);
+			map[x + 1][y] = 0;
+			curr = record;
+		}
+		if (y - 1 >= 0 && map[x][y - 1] == 0) {
+			curr += rotate(s, 2) + 1;
+			map[x][y - 1] = 1;
+			judge(x, y - 1, 2, map);
+			map[x][y - 1] = 0;
+			curr = record;
+		}
+		if (x - 1 >= 0 && map[x - 1][y] == 0) {
+			curr += rotate(s, 3) + 1;
+			map[x - 1][y] = 1;
+			judge(x - 1, y, 3, map);
+			map[x - 1][y] = 0;
+			curr = record;
+		}
+	}
+}
+

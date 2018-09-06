@@ -1,0 +1,114 @@
+广度优先求最短路径
+# -*- coding:utf-8 -*-
+# graph is in adjacent list representation
+graph = {
+        '1': ['2', '3', '4'],
+        '2': ['5', '6'],
+        '5': ['9', '11'],
+        '4': ['7', '8'],
+        '7': ['10', '12']
+        }
+
+def bfs(graph, start, end):
+    # maintain a queue of paths
+    queue = []
+    # push the first path into the queue
+    queue.append([start])
+    while queue:
+        # get the first path from the queue
+        path = queue.pop(0)
+        # get the last node from the path
+        node = path[-1]
+        # path found
+        if node == end:
+            return path
+        # enumerate all adjacent nodes, construct a new path and push it into the queue
+        for adjacent in graph.get(node, []):
+            print  adjacent
+            print list(path)
+            new_path = list(path)
+            new_path.append(adjacent)
+            print  new_path
+            queue.append(new_path)
+            print queue
+print bfs(graph, '1', '11')
+
+
+程序说明：
+
+node为1时，graph.get(node, [])获得[2，3，4],然后adjacent依次为2，3，4，list()函数将元素转化为列表元素。
+
+queue中开始为[1],path为queue的首元素[1],queue弹出首元素后为[],取出path列表的尾元素node 1不是11;      则继续将新路径节点加入新路径队列搜索，  要加入的新队列以path列表的尾元素node认识的节点在已有path基础上进行尾部插入加入。           如此时path=[1]，node为1时，graph.get(node, [])获得[2，3，4]，new_path依次为['1', '2'], ['1', '3'], ['1', '4']，然后依次加入queue中，queue不为空，重复以上过程，则queue为1,2 1,3 1,4 2！=11，则1,2弹出，1,2,5, 1,2,6进入，此时queue为1,3, 1,4,1,2,5, 1,2,6，如此可控的进行搜索。
+
+当有node=11时，程序自动终止，但queue此时并不一定为空，即为路径可能不只一条未求完，当求所有路径时，声明一个allpath，当有node=11时，将path加入到allpath，在while queue外返回allpath，此处是表示queue已为空后运行到这里，所有路径都搜索过。
+['1']
+['1', '2']
+[['1', '2']]
+['1']
+['1', '3']
+[['1', '2'], ['1', '3']]
+['1']
+['1', '4']
+[['1', '2'], ['1', '3'], ['1', '4']]
+['1', '2']
+['1', '2', '5']
+[['1', '3'], ['1', '4'], ['1', '2', '5']]
+['1', '2']
+['1', '2', '6']
+[['1', '3'], ['1', '4'], ['1', '2', '5'], ['1', '2', '6']]
+['1', '4']
+['1', '4', '7']
+[['1', '2', '5'], ['1', '2', '6'], ['1', '4', '7']]
+['1', '4']
+['1', '4', '8']
+[['1', '2', '5'], ['1', '2', '6'], ['1', '4', '7'], ['1', '4', '8']]
+['1', '2', '5']
+['1', '2', '5', '9']
+[['1', '2', '6'], ['1', '4', '7'], ['1', '4', '8'], ['1', '2', '5', '9']]
+['1', '2', '5']
+['1', '2', '5', '11']
+[['1', '2', '6'], ['1', '4', '7'], ['1', '4', '8'], ['1', '2', '5', '9'], ['1', '2', '5', '11']]
+['1', '4', '7']
+['1', '4', '7', '10']
+[['1', '4', '8'], ['1', '2', '5', '9'], ['1', '2', '5', '11'], ['1', '4', '7', '10']]
+['1', '4', '7']
+['1', '4', '7', '12']
+[['1', '4', '8'], ['1', '2', '5', '9'], ['1', '2', '5', '11'], ['1', '4', '7', '10'], ['1', '4', '7', '12']]
+['1', '2', '5', '11']
+
+打印所有路径
+
+# graph is in adjacent list representation
+graph = {
+        1: [2, 3, 4],
+        2: [5, 6],
+        3: [4,11],
+        5: [9, 10],
+        4: [7, 8],
+        7: [11, 12]
+        }
+ 
+def bfs(graph, start, end):
+    # maintain a queue of paths
+    queue = []
+    allpath = []
+    # push the first path into the queue
+    queue.append([start])
+    while queue:
+        # get the first path from the queue
+        path = queue.pop(0)
+        # get the last node from the path
+        node = path[-1]
+        # path found
+        if node == end:
+            allpath.append(path)
+        # enumerate all adjacent nodes, construct a new path and push it into the queue
+        for adjacent in graph.get(node, []):
+            new_path = list(path)
+            new_path.append(adjacent)
+            queue.append(new_path)
+    return allpath
+ 
+print bfs(graph, 1, 11)
+
+https://blog.csdn.net/brightzelool/article/details/73730152

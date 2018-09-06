@@ -1,0 +1,61 @@
+输入
+4
+1 2 
+1 3
+3 4
+
+输出
+4
+
+
+4即节点1访问完所有路径的最短路径长
+最短路径为：
+1-->2-->1-->3-->4
+
+注意到，需要处理回退，回溯与DFS的结合使用
+
+代码未完待续.....
+# -*- coding:utf-8 -*-
+n =input()
+n = int(n)
+
+graph = {
+        '1': ['2', '3'],
+        '3': ['4']
+        }
+
+def bfs(graph, start, end):
+   
+    queue = []
+   
+    queue.append([start])
+    while queue:
+        
+        path = queue.pop(0)
+      
+        node = path[-1]
+      
+        if node == end:
+            return path
+        
+        for adjacent in graph.get(node, []):
+            
+            new_path = list(path)
+            new_path.append(adjacent)
+           
+            queue.append(new_path)
+allpath = []           
+for i in range(2,n+1):
+	allpath.append(bfs(graph, '1',str(i)))
+for i in range(len(allpath)):
+	if(set(allpath[i]) < set(allpath[i]))
+        allpath.remove(i)
+        n=n-1
+        print allpath[i]
+print len(array).... 
+
+
+
+
+
+
