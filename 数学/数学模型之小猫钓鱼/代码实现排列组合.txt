@@ -1,0 +1,19 @@
+http://www.cnblogs.com/autosar/archive/2012/04/08/2437799.html
+
+void perm(int list[], int s, int e, void (*cbk)(int list[])) 
+{     
+    int i;
+    if(s > e)     
+    {
+        (*cbk)(list);
+    }
+    else    
+    {         
+        for(i = s; i <= e; i++)
+        {             
+             swap(list, s, i);             
+             perm(list, s + 1, e, cbk);             
+             swap(list, s, i);         
+        }
+    }
+}

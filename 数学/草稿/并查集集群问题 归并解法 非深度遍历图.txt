@@ -1,0 +1,79 @@
+并查集解岛屿数量问题
+定义状态数组为roots[n*m],均初始化为-1。找到1的坐标为输入，状态数组存id,id是n*x+y，count++；每次只左上右下找四次就行，无需递归，找到1了取出二者roots值比较，不同则置其状态数组置为n*x+y，同时count--，因为下次找到此1时又会加回来。相同则继续。最终count值为岛数，而roots中重复数最多的数(-1不计)就是集群数量最多的个数。 求数组重复数最多的数，动态规划。
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include<sstream>       
+#include<string> 
+using namespace std;
+typedef vector<pair<int, int> > RangeList;
+class Solution {
+ public :
+    vector <int> numIslands2(int m, int n, vector<pair <int,int> >& positions) {
+        vector < int > res;
+         int cnt = 0 ;
+        vector < int > roots(m * n, - 1 );
+      vector<vector<int>  > dirs;
+      dirs.resize(4);
+      //dir[0][0]={{0, -1},{-1, 0},{0, 1},{1, 0}};
+	for (int i = 0; i < 2; ++i){
+		dirs[i].resize(4);
+        }
+	dirs[0][0] = 0;
+	dirs[0][1] = -1;
+	dirs[0][2] = -1;
+	dirs[0][3] = 0;
+	dirs[1][0] = 0;
+	dirs[1][1] = 1;
+	dirs[1][2] = 1;
+	dirs[1][3] = 0;
+
+		
+		
+         for ( a : positions) {
+             int id = n * a .first + a.second;
+            roots[id] = id;
+             ++ cnt;
+             for (auto dir : dirs) {
+                 int x = a.first + dir[ 0 ], y = a.second + dir[ 1 ], cur_id = n * x + y;
+                 if (x < 0 || x >= m || y < 0 || y >= n || roots[cur_id] == - 1 ) continue ;
+                 int p = findRoot(roots, cur_id), q = findRoot(roots , id);
+                 if (p != q){ 
+                    roots[p] = q;
+                     -- cnt;
+                     }
+                }
+            res.push_back(cnt);
+        }
+        return res;
+    }
+    int findRoot(vector< int >& roots, int id) {
+         return (id == roots[id]) ? id : findRoot(roots, roots[id]);
+    }
+};
+int main(){
+    RangeList intervals;
+    int m,n;
+    m=3;
+    n=3;
+    for (int i = 0; i < n; ++i) {
+        cin >> start >> end;
+        intervals.push_back(make_pair(start, end));
+    }
+    Solution M;
+    M.numIslands2(m,n,&intervals);
+    
+    return 0;
+}
+
+参考链接：
+http://www.cnblogs.com/grandyang/p/5190419.html
+
+https://blog.csdn.net/linside1022/article/details/79402576
+
+寻找数组中重复数最多的数字
+https://blog.csdn.net/u013696062/article/details/38513685
+
+https://blog.csdn.net/u014473112/article/details/54176803
+
+https://blog.csdn.net/tkp2014/article/details/47085661

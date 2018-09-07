@@ -1,0 +1,29 @@
+服务器程序设计笔试题 2018.3
+一 、网络编程
+a）.使用linux epoll模型水平触发模式(Level- Triggered);当socket可写时，会不停的触发socket 可写的事件，如何处理？
+b) 向socket发送数据时，可能只发送了用户缓存存里的一半，然后失数，如何处理?
+c)非阻塞connect()如何实现?
+d) TCP和UDP通信的差别?什么是IOCP?
+
+二、 c/c++
+a) C中static有什么作用?
+b) C与C++各自是如何定义常量的?有什么不同?
+c)new/delete与malloc()free() 的区别?
+d)常见的STL 容器有哪些?
+
+三、数据库
+Student(S#,Sname,SageSsex)学生表
+Course(C#,Cname,T#)课程表
+SC(S#,C#,score)成绩表
+Teacher(T#,Tname)教师表
+a) 查询"001”课程比"002”课程成绩高的所有学生的学号;
+b)查询平均成绩大于60分的同学的学号和平均成绩;
+c)查询姓"李”的老师的个数;
+
+四、Linux
+a)什么是BIOS, MBR和GRUB?
+b)什么是Telnet和SSH?
+c)什么是符号链接?
+
+
+

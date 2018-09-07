@@ -1,0 +1,115 @@
+输入
+4
+1 2 
+1 3
+3 4
+
+输出
+4
+
+
+4即节点1访问完所有路径的最短路径长
+最短路径为：
+1-->2-->1-->3-->4
+
+题目分析：
+对树遍历回溯时，递归状态与栈状态保持一致，中加入判断条件，求二叉树和满足某值的所有路径是这类操作的经典题，因为操作保持了指针访问控制与栈状态的一致性。
+
+此题用对树遍历得到由节点1到所有（叶子）节点的路径，然后排序路径大小，按特点求和即可。
+
+程序说明：
+（1）树的表示，图的表示，本质都是要表达清楚它们的路径关系，输入中用矩阵表示法表示树，即无向图。
+
+输入：1 2
+      1 3
+      3 4
+接收的图为：
+j\i: 0  1  2  3  4
+0    0  0  0  0  0
+1    0  0  1  1  0
+2    0  1  0  0  0
+3    0  1  0  0  1
+4    0  0  0  1  0
+
+图关于y=-x对称；（1,2）处有1，此1说明存在路径1->2. bfs(1,0,arr)，1表示从1开始向后接路径；（2）flag[]是访问过的状态数组；（3）循环中判断了递归调用回溯；（4）end是判断何时向list加入数据，如1->3->4->false,在最后状态为false时加入，即叶子节点，此路径结尾处，而回溯到1->3->4三处的状态都为true，因为只要向下走了上一个状态即为true。
+
+package a;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+ 
+public class Mai {
+    static boolean flag[];
+    static List list=new ArrayList();
+    public static void main(String[] args) {
+    	System.out.print("输入：  " );
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        flag=new boolean[n+1];
+        int arr[][]=new int[n+1][n+1];
+        for(int i=0;i<n-1;i++){
+            int a=sc.nextInt();
+            int b=sc.nextInt();
+            arr[a][b]=1;
+            arr[b][a]=1;
+        }
+        for (int x = 0; x < arr.length; x++) {
+			for (int y = 0; y < arr[x].length; y++) {
+				System.out.print(arr[x][y]+" " );
+			}
+			System.out.println("");
+		}
+        for(int i=0;i<n;i++){
+            flag[i+1]=true;
+        }
+        
+        bfs(1,0,arr);
+        int count=0;
+        Collections.sort(list);
+        int len=list.size();
+        
+        for(int i=0;i<len;i++){
+            System.out.println(list.get(i));
+            if(i==len-1)
+                count+=(int)list.get(i);
+            else
+                count+=(int)list.get(i)*2;
+        }
+        System.out.println(count);
+ 
+    }
+    static void bfs(int start ,int len,int arr[][]){
+        int n=arr.length-1;  
+       
+        //访问到叶子节点就停止
+        boolean end=false;
+        
+        for(int i=1;i<=n;i++){
+        	System.out.println("i: "+i);
+            System.out.println("start "+start);
+            System.out.println("len: "+len);
+            if(arr[start][i]==1&&flag[i]==true){
+                flag[start]=false;
+                end=true;
+                bfs(i,len+1,arr);
+                
+            }
+        }
+        System.out.println("end "+end);
+        if(!end){
+        	System.out.println("在list中加入len "+len);
+            list.add(len);
+        }
+    }
+ 
+}
+
+
+
+
+
+http://www.cnblogs.com/fangxiaoneng/p/9601610.html
+
+

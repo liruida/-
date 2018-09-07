@@ -1,0 +1,140 @@
+输入一个只包含加减乖除和括号的合法表达式，求表达式的值。其中除表示整除。
+
+例子：
+输入:
+1-2+3*(4-5)
+
+输出
+-4
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stack>
+using namespace std;
+stack<char> stack_ch;//符号栈 
+stack<int> stack_num; //数值栈 
+char str[1000]; //输入的中缀表达式 
+char number[100]; //用来将字符串中的数字变成int型的数组 
+ 
+void js1()//这个函数只接收+-号，+-号等级最低，运算符栈中除了括号外 都可以取出运算 
+{
+	int num1,num2;
+	while (stack_ch.top()!='(')  //从运算符栈中取一个运算符 对数值栈顶和次顶元素进行运算 
+	{
+		num1=stack_num.top();//取出一个数
+		stack_num.pop();//弹出这个数
+		num2=stack_num.top();
+		stack_num.pop();
+		switch (stack_ch.top())
+		{
+			case '+':
+				num2+=num1;
+			    break;
+			case '-':
+				num2-=num1;
+				break;
+			case '*':
+				num2*=num1;
+				break;
+			case '/':
+				num2/=num1;
+				break;
+		 } 
+		 stack_num.push(num2);//将计算结果入数值栈
+		  stack_ch.pop();//删除已经用过的符号 
+	}
+}
+void js2()//只接收*/运算符 
+{
+	int num1,num2;
+	while (stack_ch.top()=='*' || stack_ch.top()=='/') //栈中只有*/优先级大于*/  
+	{
+		num1=stack_num.top();
+		stack_num.pop();
+		num2=stack_num.top();
+		stack_num.pop();
+		switch (stack_ch.top())
+		{
+			case '*':
+			    num2*=num1;
+				break;
+			case '/':
+			    num2/=num1;
+				break; 
+		}
+		stack_ch.pop();
+		stack_num.push(num2);
+	}
+}
+int main()
+{
+	int i,k=0,s;
+	char c[5]=".";
+	stack_ch.push('(');
+	gets(str);
+	strcat(str,c);
+	for (i=0;str[i];i++)
+	{
+		if (str[i]>='0'&&str[i]<='9')//为数字
+		  {
+		  	number[k++]=str[i];
+		  	continue;
+		  }
+		  number[k]='\0'; //变成字符串\0结尾 
+		  if (number[0]!='\0')
+		  {
+		  s=atoi(number);
+		  number[0]='\0';
+		  stack_num.push(s); //将字符串转换成整型，放入数值栈中 
+	      }
+		  k=0; 
+	    	switch(str[i])//+-(这3个符号入js1函数，*/入js2函数 ，优先级不同要分开计算 
+	    	{
+	    		case '+':  
+	    			js1();
+	    			stack_ch.push('+');
+	    			break;
+	    		case '-':
+	    			js1();
+	    			stack_ch.push('-');
+	    			break;
+	    		case '*':
+	    			js2();
+	    			stack_ch.push('*');
+	    			break;
+	    		case '/':
+	    			js2();
+	    			stack_ch.push('/');
+	    			break;
+	    		case '(':
+	    			stack_ch.push('(');
+	    			break;
+	    		case ')':
+	    			js1();
+	    			stack_ch.pop();
+	    			break;
+	    		case '.':
+	    			{
+	    				js1();
+	    				stack_ch.pop();
+					}
+			}
+	}
+			printf("%d\n",stack_num.top());
+			system("pause");
+}
+
+参考链接：
+https://blog.csdn.net/qq_36238595/article/details/54730341
+
+https://blog.csdn.net/sgbfblog/article/details/8001651
+
+https://blog.csdn.net/geekcoder/article/details/6829386
+
+https://blog.csdn.net/u011822516/article/details/40478039
+
+https://blog.csdn.net/u013486414/article/details/41176125
+
+https://blog.csdn.net/sinat_31790817/article/details/79144205

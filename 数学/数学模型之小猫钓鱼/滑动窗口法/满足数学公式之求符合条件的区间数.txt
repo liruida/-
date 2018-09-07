@@ -1,0 +1,104 @@
+http://www.cnblogs.com/keeya/p/9602726.html
+输入：
+5 3 2
+31112
+输出
+3
+
+5：数组中元素个数  3:k  2:t
+下标：1 2 3 4 5
+数组：3 1 1 1 2
+
+区间[a,b]（a,b及区间内的数是数组下标）要同时满足：
+1.b-a+1=k
+2.以区间内的数为下标的数组值中要存在一个数至少出现了t次。
+
+上例中 区间[1,3] [2,4] [3,5]满足要求，例[1,3]首先，3-1+1=k=2，然后数组中数为3 1 1，存在1出现了2次，大于等于t（2）成立。
+
+
+//利用滑动窗口思想，利用List模拟一个窗口，在窗口中利用map存储数字出现的次数，每次窗口移动遍历map判断是否有数出现的次数达到阈值t
+
+
+
+
+package a;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Scanner;
+
+public class windows {
+	
+    static class Node {
+        int index;
+        int value;
+
+        Node(int index, int value) {
+            this.index = index;
+            this.value = value;
+        }
+    }
+
+    public static void main(String[] args) {
+    	System.out.println("输入： ");
+        Scanner in = new Scanner(System.in);
+        while (in.hasNext()) {
+            int n = in.nextInt();
+            int k = in.nextInt();
+            int t = in.nextInt();
+
+            int[] arr = new int[n];
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = in.nextInt();
+            }
+            //用一个List来模拟窗口
+            LinkedList<Node> list = new LinkedList<>();
+            //value：times利用map来统计每个value出现的次数
+            HashMap<Integer, Integer> map = new HashMap<>();
+            int end = 0;
+            int res = 0;//统计次数
+            while (end < arr.length) {
+                if (list.size() < k) {
+                    list.add(new Node(end, arr[end]));
+                    addNode(map,arr,end);
+                    end++;
+                }
+
+                if (list.size() == k) {
+                    //统计出现的次数有没有大于t
+                    int temptimes = 0;
+                    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                        temptimes = Math.max(temptimes, entry.getValue());
+                    }
+                    if (temptimes >= t) {
+                        res++;
+                    }
+                    
+                    //弹出list最前面的值
+                    Node node = list.poll();
+                    if (map.get(node.value) == 1) {
+                        map.remove(node.value);
+                    }else {
+                        //出现次数-1
+                        map.put(node.value, map.get(node.value) - 1);
+                    }
+                }
+            }
+            System.out.println(res);
+        }
+    }
+
+    private static void addNode(HashMap<Integer,Integer> map,int arr[],int end) {
+        if (!map.containsKey(arr[end])) {
+            map.put(arr[end], 1);
+        }else {
+            map.put(arr[end], map.get(arr[end])+1);
+        }
+    }
+}
+
+https://blog.csdn.net/qq_35180973/article/details/82492225
+
+https://www.cnblogs.com/keeya/p/9211089.html
+
+https://blog.csdn.net/xiao_dondon/article/details/77757695

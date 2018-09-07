@@ -1,0 +1,66 @@
+输入
+4
+1 2 
+1 3
+3 4
+
+输出
+4
+
+
+4即节点1访问完所有路径的最短路径长
+最短路径为：
+1-->2-->1-->3-->4
+
+注意到，需要处理回退，回溯与DFS的结合使用,此时回溯借助的栈，是用回溯优先即深度优先遍历解的。得到由节点1到所有（叶子）节点的路径
+
+而在以下程序中，借助队列，进行的广度优先遍历，将由节点1到所有节点的路径均获得并存在allpath[i]列表中。需要处理，接近目标得到由节点1到所有（叶子）节点的路径，即for i in range(2,n+1)中（）内应为叶子节点的标号。
+
+无论使用BFS或DFS，均可得到由节点1到所有叶子节点的路径，观察此题的总路径特征与各由节点1到所有叶子节点的路径的关系，发现，只有最大边会走一次，其它边都要走两次，求和就行了，要找到最大边，先排序即可。例： 树：1-11 1-2-7  1-5-8-9，则1-5-8-9走一次，1-2-7走到7后回退到1，1-11走到11后回退到1，均走了两遍，最短路径为：1-11-，1-2-7-2-，1-5-8-9 1*2+2*2+3（len-1）=9. 
+
+
+
+# -*- coding:utf-8 -*-
+n =input()
+n = int(n)
+
+graph = {
+        '1': ['2', '3'],
+        '3': ['4']
+        }
+
+def bfs(graph, start, end):
+   
+    queue = []
+   
+    queue.append([start])
+    while queue:
+        
+        path = queue.pop(0)
+      
+        node = path[-1]
+      
+        if node == end:
+            return path
+        
+        for adjacent in graph.get(node, []):
+            
+            new_path = list(path)
+            new_path.append(adjacent)
+           
+            queue.append(new_path)
+allpath = []           
+for i in range(2,n+1):
+	allpath.append(bfs(graph, '1',str(i)))
+for i in range(len(allpath)):
+	if(set(allpath[i]) < set(allpath[i]))
+        allpath.remove(i)
+        n=n-1
+        print allpath[i]
+print len(array).... 
+
+
+
+
+
+
