@@ -1,4 +1,4 @@
-package com.zgc.fds;
+﻿package com.zgc.fds;
 
 import org.apache.poi.xwpf.usermodel.*;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,9 @@ import java.util.List;
 
 public class apiDoc {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(apiDoc.class);
-    private static String path = "/Users/zhangshuo/fds/src/main/java/com/zgc/fds/controller/";
-    private static String parameterPaths = "/Users/zhangshuo/fds/src/main/java/com/zgc/fds/model/httovo/";
-    private static String outputPath = "/Users/zhangshuo/test/fdsApi.docx";
+    private static String path = "/Users/xiaoming/fds/src/main/java/com/zgc/fds/controller/";
+    private static String parameterPaths = "/Users/xiaoming/fds/src/main/java/com/zgc/fds/model/httovo/";
+    private static String outputPath = "/Users/xiaoming/test/fdsApi.docx";
     private static List<String> pathList = apiDoc.getPathList(path);
     private static List<String> parameterList = apiDoc.getPathList(parameterPaths);
 
