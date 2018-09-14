@@ -1,5 +1,7 @@
 http://www.cnblogs.com/autosar/archive/2012/04/08/2437799.html
 
+https://www.2cto.com/kf/201312/267366.html
+
 void perm(int list[], int s, int e, void (*cbk)(int list[])) 
 {     
     int i;

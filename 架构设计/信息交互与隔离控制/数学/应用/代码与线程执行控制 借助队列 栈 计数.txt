@@ -1,0 +1,13 @@
+static等执行顺序与栈执行
+
+多进程执行顺序与队列，系统调度优先级队列干扰，方法队列干扰
+
+变量类中位置，创建位置与生命周期（指针使用）。
+
+https://www.bbsmax.com/A/MyJxARGp5n/
+
+https://www.zhihu.com/question/52801009#answer-48367604
+
+https://blog.csdn.net/zhhz418418/article/details/40746475
+
+https://www.bbsmax.com/A/gVdn2pDdWl/

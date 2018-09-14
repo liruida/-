@@ -1,0 +1,232 @@
+完全多部图：
+1   4   1与23连，4与23连，14不连，23不连，得        子集14 23
+
+2   3
+
+反例非完全多部图  1与2连，4与23连，14不连，23不连
+
+输入 1
+     4 3
+     1 2
+     3 4
+     2 3
+
+nm:  2; 1,3; 2,4; 3  表示1与2相连；2与1,3相连......
+othernumsMap:01234 00034 00004 01000 01200
+表示：1不与3 4相连，2不与4相连
+
+由othernumsMap得，如1不与3 4相连，则表示首先1可以与3组为一个集合，1也可与4组为一个集合，但此时，集合里有1和3，亦需保证，3也要可以和4组合，若不能，则不能加入集合里；如此得到：
+list：13；24；31；41
+当13 =31 24 =41都相等时，集合是完全连接的
+只需判断下集合是否相等。
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+
+#include <cstdio>
+
+
+#include <vector>
+
+#include <set>
+
+#define FRE
+
+
+
+using namespace std;
+
+
+
+int T;
+
+int N,M;
+bool   boolsort(vector<int>& listi, vector<int>& a ){  //使用选择排序 
+  // for (int i = 0; i<listi.size() ; ++i){cout<<listi[i];}
+    int n=a.size();
+    cout<<"n:"<<n<<endl;
+    cout<<"kaishibijiao"<<endl;
+    	for (int i = 0; i < n ; ++i){cout<<a[i];}
+	for (int i = 0; i < n - 1; ++i)//一共进行n-1趟
+	{
+		int index = i;//记录最小元素位置
+		for (int j = i + 1; j < n; ++j)//在a[i...n-1]中选择最小的元素
+		{
+			if (a[index] > a[j])
+			{
+				index = j;//更新最小元素位置
+			}
+		}
+		if (index != i)
+		{
+			swap(a[i], a[index]);//与第i个位置交换
+		}
+	}
+	cout<<"bijiaojieshu:"<<endl;
+    
+	for (int i = 0; i < n ; ++i){cout<<a[i];}
+	if(listi==a){cout<<"ture"<<endl; return 1;}
+    else{cout<<"false"<<endl; return 0;}
+}
+bool panduan(vector<int> flag,vector<int> othernumsMap){
+             bool res=0;
+        for(int y=0;y<flag.size();y++){ 
+               res=0;
+             for(int i=0;i<othernumsMap.size();i++){
+                      if(othernumsMap[i]!=0&&othernumsMap[i]==flag[y]){
+                         if(othernumsMap[i]==flag[y]){
+                            res=1;
+                            break;
+                      }}
+             }
+                   
+                   }
+             return res;
+     }
+
+int main()
+
+{
+scanf("%d",&T);
+
+    for(int t=0;t<T;++t){
+
+        // T组数据
+
+        //printf("\nNext Data:\n");
+
+        scanf("%d%d",&N,&M);
+
+        //printf("N: %d, M: %d\n",N,M);
+
+        vector<set<int> > numMap(N+1);
+
+        vector<vector<int> > numsMap(N+1);
+
+        vector<vector<int> > group;
+
+        for(int i=0;i<M;++i){
+
+             int x,y;
+
+            scanf("%d%d",&x,&y);
+             numMap[x].insert(y);
+             numMap[y].insert(x);
+
+          }
+
+
+        
+        
+       for(int i=1;i<=N;++i){
+
+            //printf("i: %d -> ",i);
+
+            int j=0;
+
+            for(set<int>::iterator it=numMap[i].begin();it!=numMap[i].end();++it){
+
+            //for(int j=0;j<numMap[i].size();++j){
+
+                numsMap[i].push_back(*it);
+
+                //printf("%d , ",*it);
+
+                //printf("%d , ",numsMap[i][j]);
+
+                ++j;
+
+            }
+
+            //printf("\n");
+
+        }
+        vector<vector<int> > othernumsMap(N+1);
+       for(int i=0;i<numsMap.size();++i){
+              vector<int> flag(N+1,0);
+              for(int k=0;k<=N;k++){ 
+                  flag[k]=k;}
+              for(int j=0;j<numsMap[i].size();++j){ 
+                        
+                         flag[numsMap[i][j]]=0;
+                         flag[i]=0; 
+                         }
+                            
+                          othernumsMap[i]=flag;
+                       } 
+                    for(int i=0;i<othernumsMap.size();++i){
+              for(int j=0;j<othernumsMap[i].size();++j){    
+                         cout<<othernumsMap[i][j]; 
+                          }  
+                          cout<<""<<endl; 
+                       }    
+                         
+         vector<vector<int> > list;         
+          for(int i=1;i<othernumsMap.size();++i){
+             vector<int> flag;
+             flag.push_back(i);
+              for(int j=0;j<othernumsMap[i].size();++j){
+                      if(othernumsMap[i][j]!=0){
+                      for(int y=0;y<flag.size();y++){                      
+         if(othernumsMap[i][j]!=flag[y]&&panduan(flag,othernumsMap[othernumsMap[i][j]])){
+                           
+                          flag.push_back(othernumsMap[i][j]);
+                       } }}}
+                        list.push_back(flag); 
+                       }
+                       
+                 for(int i=0;i<list.size();++i){
+              for(int j=0;j<list[i].size();++j){    
+                         cout<<i<<j<<list[i][j]<<";"; 
+                          }  
+                          cout<<""<<endl; 
+                       }   
+                             
+               int res=0;   
+                
+              for(int i=0;i<list.size();++i){
+              if(list[i].size()==1){res=1;}  
+              if(list[i].size()>1){
+              for(int j=1;j<list[i].size();++j){ 
+                      
+                      res=0;   
+                       
+                         if(boolsort(list[i], list[list[i][j]-1])){res=1; 
+                          } else{
+                                 res=0;
+                                 j=list[i].size();
+                                 i=list.size();
+                                 } 
+                                 }
+                                 }
+                       }   
+                       
+                    
+                   if(res)printf("Yes\n");
+
+                   else printf("No\n");
+                    
+                  
+                   
+               
+               }
+                system("pause");
+                  return 0;
+
+         }
+
+
+
+
+
+
+
+

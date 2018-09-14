@@ -1,0 +1,7 @@
+https://blog.csdn.net/zmissm/article/details/22298759?locationNum=9&fps=1
+
+模拟堆排序维护与查找过程
+
+即为树的数学化操作
+
+http://www.cnblogs.com/chengxiao/p/6129630.html

@@ -1,0 +1,65 @@
+https://blog.csdn.net/jjj19891128/article/details/22685605
+
+输入：
+1，1
+0，0， 0，2， 2，2，  2，0
+输出：
+yes，0
+
+输入：
+2，3
+0，0， 0，2， 2，2，  2，0
+输出：
+no，1  表示：点2，3不在第二行围成的（输入保证闭合）多边形内，距离进入多变行最近距离为1
+
+
+解题思路：(以下是错误的，未考虑多边形的镂空情况)
+排序，分别求左右坐标的最大值（可以不要排序），若m<=left（MAX）&&n<=right(MAX)表示不越界，否则vector内点依次与目标点求距离S，取最小值输出，S初始化为int最大值。
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include<sstream>       
+#include<string> 
+#include<math.h>
+#define INT_MAX 0x7fffffff
+using namespace std;
+typedef vector<pair<int, int> > RangeList;
+int main(){
+    RangeList intervals;
+    int m,n,start,end;
+    cin>>m>>n;
+    for (int i = 0; i <4; ++i) {
+        cin >> start >> end;
+        intervals.push_back(make_pair(start, end));
+    }
+    sort(intervals.begin(), intervals.end());
+     for (int i = 0; i <4; ++i) {
+        
+        cout<<intervals[i].first<<intervals[i].second<<endl;
+    }
+    int left=0;
+    int right=0;
+    for (int i = 0; i < intervals.size(); ++i) {
+    left = left>intervals[i].first?left:intervals[i].first;
+    right = right>intervals[i].second?right:intervals[i].second;
+     }
+      cout << left<<right<< endl; 
+     if(m<=left&&n<=right){
+      cout << "yes,0"<< endl;         
+    }else{
+           int s=INT_MAX ;
+           for (int i = 0; i < intervals.size(); ++i) {
+           double temp=(m-intervals[i].first)*(m-intervals[i].first)+(n-intervals[i].second)*(n-intervals[i].second);
+            temp=sqrt(temp);
+            s=s<temp?s:temp;
+          }
+          cout << "no"<< s<<endl;
+          }
+     
+    system("pause");
+    return 0;
+}

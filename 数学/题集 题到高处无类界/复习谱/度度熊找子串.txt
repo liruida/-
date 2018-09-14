@@ -1,0 +1,64 @@
+度度熊找子串（百度2017秋招真题）
+
+度度熊收到了一个只有小写字母的字符串S，他对S的子串产生了兴趣，S的子串为S中任意连续的一段。他发现，一些子串只由一种字母构成，他想知道在S中一共有多少种这样的子串。
+
+例如在串”aaabbaa”中，度度熊想找的子串有”a”,”aa”,”aaa”,”b”,”bb”五种。
+
+
+
+
+（本题只考虑子串的种数，相同的子串在多个位置出现只算一次）
+解题思路：变量字符串，统计连续字符的个数，并将其加入到hashMap中，最后求出所有hashMap中所有value的和。
+
+package a;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Scanner;
+public class string {
+	public static void main(String[] args) {
+		System.out.println("shuru");
+		Scanner sc = new Scanner(System.in);
+		while (sc.hasNext()) {
+			String string = sc.next();
+			char[] cs = string.toCharArray();
+			HashMap<Character, Integer> hashMap = new HashMap<>();
+			for (int i = 0; i < cs.length; i++) {
+				char c = cs[i];
+				int count = 0;
+				for (int j = i; j < cs.length; j++) {// 统计连续相同的字符个数
+					if (c == cs[j]) {
+						count++;
+					} else {
+						break;
+					}
+				}
+				if (hashMap.containsKey(c)) {// 判断hashMap中相同字符的个数那个大，大的写入hashMap
+					int value = hashMap.get(c);
+					if (value < count) {
+						hashMap.put(c, count);
+					}
+				} else {
+					hashMap.put(c, count);
+				}
+				i = i + count - 1;// 注意此处，i还要参加外层循环，i++操作，故先减1
+			}
+			int sum = 0;
+			for (Entry<Character, Integer> c : hashMap.entrySet()) {// 遍历hashMap统计所有子串的个数
+				int value = c.getValue();
+				sum += value;
+			}
+			System.out.println(sum);
+		}
+		sc.close();
+ 
+	}
+    
+}
+
+
+
+
+
+
+
+https://blog.csdn.net/qq_30507287/article/details/71311244

@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring> 
+using namespace std;
+int t,n;
+char str[100][101];
+int searchMaxSubString(char* source){
+	int subStrLen,sourceStrLen;	
+	int i,j;
+	bool foundMaxSubStr;
+	char subStr[101],revSubStr[101]; 
+	subStrLen = sourceStrLen = strlen(source);
+	while(subStrLen > 0){
+		//搜索不同长度的子串，从最长的子串开始搜索
+		for(i=0;i<=sourceStrLen - subStrLen;i++){
+			//搜索长度为 subStrLen 的全部子串
+			strncpy(subStr,source+i,subStrLen);
+			strncpy(revSubStr,source+i,subStrLen);
+			subStr[subStrLen]=revSubStr[subStrLen]='\0';//'\0'必须加 
+			strrev(revSubStr);//反转字符串 
+			foundMaxSubStr = true;
+			//判断是否存在子串 
+			for(j=0;j<n;j++){
+				//不存在返回NULL
+				if(strstr(str[j],subStr)==NULL && strstr(str[j],revSubStr)==NULL){
+					foundMaxSubStr = false;
+					break; 
+				} 
+			}
+			if(foundMaxSubStr){
+				return subStrLen;
+			}
+		}
+		subStrLen--;
+	}
+	return 0;
+}
+int main()
+{
+	int i,minStrLen,subStrLen;
+	char minStr[101];
+	cin>>t;
+	while(t--){
+		cin>>n;
+		minStrLen = 100;
+		for(i=0;i<n;i++){
+			cin>>str[i];
+			//寻找输入字符串中的最短字符串
+			if(strlen(str[i])<minStrLen){
+				strcpy(minStr,str[i]);
+				minStrLen = strlen(str[i]); 
+			}
+		}
+		//搜索满足条件的最长字符串
+		subStrLen = searchMaxSubString(minStr);
+		cout<<subStrLen<<endl;
+	}
+	return 0;
+}
+
+
+https://blog.csdn.net/wang_1997/article/details/56696196
