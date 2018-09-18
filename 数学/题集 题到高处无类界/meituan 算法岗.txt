@@ -1,0 +1,75 @@
+#include <iostream>
+
+#include <vector>
+using namespace std;
+vector<int> vec;
+int main() {
+    int n,k,x;
+    n=0;
+    k=0;
+    x=0;
+    cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        cin>>x;
+        
+        if(x==0)
+        { 
+                vec.push_back(i);}
+    }
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+    cout<<""<<endl;
+    int maxlen=0;
+     maxlen=vec[k]-1;
+    for(int i=k+1;i<vec.size();i++){
+        int tmp=vec[i]-vec[i-k-1]-1;
+        cout<<"tmp:"<<tmp;
+        maxlen=max(maxlen,tmp);
+        cout<<"maxlen:"<<maxlen;
+    }
+	cout<<maxlen<<endl;
+	system("pause");
+	return 0;
+}
+        
+
+
+ #include <iostream>
+#include <cstdio>
+#include <vector>
+using namespace std;
+
+vector<int> vec[100];
+int ans;
+void dfs(int x, int old, int w) {
+    for(int i=0;i<vec[x].size();i++){
+        if(vec[x][i]==old){
+            continue;
+        }
+        dfs(vec[x][i],x,w+1);
+    }
+    ans = max(ans, w);
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    for(int i = 1; i < n; ++ i) {
+        int x, y;
+        scanf("%d%d", &x, &y);
+        vec[x].push_back(y);
+        vec[y].push_back(x);
+    }
+    for(int i=0;i<=n;i++){
+            for(int j=0;j<vec[i].size();j++){
+        cout<< vec[i][j];}
+    }
+    
+    cout<<""<<endl;
+    ans = 0;
+    dfs(1, -1, 0);
+    printf("%d\n", (n-1)*2-ans);
+     system("pause");
+    return 0;
+}
+   

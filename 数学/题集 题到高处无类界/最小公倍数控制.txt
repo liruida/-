@@ -1,0 +1,138 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+bool isPrime(int num) {
+    bool prime = true;
+    for (int i = 2; i <= num / 2; ++i) {
+        if (num % i == 0) {
+            prime = false;
+        }
+    }
+    return prime;
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+int gcd(int a, int b) {
+    
+    int square = a * b;
+
+    int g = 1;
+    if (isPrime(a) || isPrime(b)) {
+        g = 1;
+    } else {
+        for (int i = 1; i <= (a > b ? a : b); ++i) {
+            int k = square / (i * i);
+            if (k * (i * i) == square) {
+                g = i;
+            }
+        }
+    }
+    return g;
+}
+int lcm(int a,int b){
+   
+    int g = gcd(a, b);
+    return a * b / g;
+	
+    }
+int findre(int re,int n,int j){
+    
+    re=lcm(re,n+j);
+    return re;
+    }    
+int main(){
+    int n;
+    cin>>n;
+    int res=1;
+    int re=1;
+    int m=n+1;
+    int j=0;
+    
+    for(int i=1;i<m;i++){
+     res=lcm(res,i);
+     
+     re=findre(re,n+1,j);
+     if(res<re && j>i){
+        m++;
+       }
+     if(res>re && j<i){
+                j++;
+                m=m+1;
+                
+        }
+    }
+
+   
+    cout<<m+1<<endl;
+    system("pause");
+    }
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+bool isPrime(int num) {
+    bool prime = true;
+    for (int i = 2; i <= num / 2; ++i) {
+        if (num % i == 0) {
+            prime = false;
+        }
+    }
+    return prime;
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+int gcd(int a, int b) {
+    
+    int square = a * b;
+
+    int g = 1;
+    if (isPrime(a) || isPrime(b)) {
+        g = 1;
+    } else {
+        for (int i = 1; i <= (a > b ? a : b); ++i) {
+            int k = square / (i * i);
+            if (k * (i * i) == square) {
+                g = i;
+            }
+        }
+    }
+    return g;
+}
+int lcm(int a,int b){
+   
+    int g = gcd(a, b);
+    return a * b / g;
+	
+    }
+int main(){
+    int n;
+    cin>>n;
+    int res=1;
+    for(int i=0;i<3;i++){
+     res=lcm(res,n+i);
+     
+    
+    }
+
+    cout<<res<<endl;
+    system("pause");
+    }

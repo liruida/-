@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+void   sort(vector<int>& a){  //使用选择排序 
+    int n=a.size();
+	for (int i = 0; i < n - 1; ++i)//一共进行n-1趟
+	{
+		int index = i;//记录最小元素位置
+		for (int j = i + 1; j < n; ++j)//在a[i...n-1]中选择最小的元素
+		{
+			if (a[index] > a[j])
+			{
+				index = j;//更新最小元素位置
+			}
+		}
+		if (index != i)
+		{
+			swap(a[i], a[index]);//与第i个位置交换
+		}
+	}
+
+}
+
+int main(){
+    vector<int> flag(2);
+    flag[0]=1;
+    flag[1]=2;
+    vector<int> g(2);
+    g[0]=2;
+    g[1]=1;
+    for(int i=0; i<2; i++){cout<<g[i]<<endl;}
+    sort(g);
+    for(int i=0; i<2; i++){cout<<g[i]<<endl;}
+    if(flag==g){
+        cout<<"true"<<endl; 
+                }else{
+                cout<<"false"<<endl;      
+                      }
+    system("pause");
+    return 0;
+}

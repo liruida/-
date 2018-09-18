@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+
+class Solution {
+public:
+  bool validIP(string digit)
+    {
+        int n = digit.size();
+        if(n>1)
+        {
+            if(digit[0] == '0')
+               return false;
+        }
+        const char *chara = digit.c_str();
+        int num = atoi(chara);
+        if(num>=0 && num<=255)
+           return true;
+        else 
+           return false;
+    }
+    
+    void getIP(string &s,int start,int drag,string &mid,vector<string> &result)
+    {
+    	if(drag == 4)
+    	{
+            //cout<<mid<<endl;
+			if(start == s.size() && mid != "")
+            {
+                 result.push_back(mid.substr(0,mid.size()-1));
+                 mid = "";
+            }
+            return;
+        } 
+        
+        for(int k=1;k<=3 && start+k-1<s.size();k++)
+		{
+			string temp = s.substr(start,k);
+            if(validIP(temp))
+            {
+            	string m = mid;
+                mid += temp +'.';
+                getIP(s,start+k,drag+1,mid,result);
+                mid = m;
+            }
+		}
+        return;
+    }
+    
+    vector<string> restoreIpAddresses(string s) {
+        int len = s.size();
+        vector<string> result;
+        if(len>12 || len<4) return result;
+        string mid;
+        getIP(s,0,0,mid,result);
+        return result;
+    }
+};
+int main(){
+    int n;
+    cin>>n;
+    cin.get();  //接收一行换行（空格） 
+    char str[n];
+    //string str= "25525511135";
+   
+	
+	gets(str);  //str可以接受有空格的字符 
+	int length=sizeof(str)/sizeof(str[0]);
+	 cout<<length<<endl;
+    for(int i=0;i<sizeof(str)/sizeof(str[0]);i++) {
+           cout<<str[i]<<" "<<endl;
+           }
+     for(int i=0;i<20;i++) {  //str位数不够会自动扩展 
+           cout<<str[i]<<" ";
+           }      
+    Solution S;
+    vector<string> res=S.restoreIpAddresses(str);
+    for(int i=0;i<res.size();i++){
+        cout<< res[i]<<";";
+    }
+    cout<<""<<endl;
+    system("pause");
+    }
