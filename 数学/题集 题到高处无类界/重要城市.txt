@@ -1,5 +1,110 @@
+#include <cstdio>
+#include <iostream>
+#include <cstring>
+using namespace std;
+#define MAX 105
+
+int n, m;
+int g[MAX][MAX];
+bool vis[MAX];
+int result;
+
+void read_graph()
+{
+ memset(g,0,sizeof(g));
+ int i, j;
+ char ch1, ch2;
+ n = 0;
+ for(i = 1; i <= m; ++i)
+ {
+  getchar();
+  scanf("%c %c",&ch1,&ch2);
+  int u = (int)(ch1-'A');
+  int v = (int)(ch2-'A');
+  if(n < u+1) n = u+1;
+  if(n < v+1) n = v+1;
+  g[u][v] = 1;
+ }
+}
+
+bool floyd()
+{
+ for(int k = 0; k < n; ++k)
+ {
+  for(int i = 0; i < n; ++i)
+  {
+   for(int j = 0; j < n; ++j)
+    g[i][j] = ( (g[i][j]) || (g[i][k]&&g[k][j]) );
+   if(g[i][i]) return false;
+  }
+ }
+ return true;
+}
+
+bool solve()
+{
+ int i, j, k;
+ result = 0;
+ int num = 0;
+
+ if( !floyd() ) return false;
+ for(k = 0; k < n; ++k)
+ {
+  bool flag = true;
+  for(i = 0; i < n; ++i)
+  {
+   if(g[i][k] != 0 && i != k)
+   {
+    flag = false;
+    break;
+   }
+  }
+  if(flag)
+  {
+   printf("%d:",++num);
+   printf("%c",'A'+k);
+   for(i = 0; i < n; ++i)
+   {
+    if(g[k][i] != 0)
+     printf(" %c",'A'+i);
+   }
+   printf("\n");
+  }
+ }
+ result = num;
+ return true;
+}
+
+int main()
+{
+ int k = 1;
+// freopen("input.txt","r",stdin);
+ while(scanf("%d",&m) != EOF)
+ {
+  read_graph();
+  printf("Case%d:\n",k++);
+  solve();
+  printf("%d\n",result);
+ }
+ system("PAUSE");
+ return 0;
+}
+//http://blog.sina.com.cn/s/blog_77dc9e0801013vo5.html
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 https://blog.csdn.net/anlian523/article/details/82557468
 
 https://blog.csdn.net/csdnqixiaoxin/article/details/82558509
 
-http://blog.sina.com.cn/s/blog_77dc9e0801013vo5.html

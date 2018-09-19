@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+struct node
+{
+    int x;
+    node *next;
+//    node()
+//    {
+//        next=NULL;
+//    }
+};
+ 
+int n,m;
+ 
+const int mod=99997;
+node *str[mod];
+ 
+void hasha(int a)
+{
+    int b=a;
+    a=a%mod;
+    node *q=str[a];
+    while(q->next)
+        {
+            q=q -> next;
+        }//new (node);
+    node *p=(node*) malloc (sizeof(node));
+    p->next=NULL;
+    p->x=b;
+    q->next=p;
+    return;
+}
+int main()
+{
+    for(int i=0; i<mod; i++)
+        {
+           // str[i]=new(node);
+            str[i]=(node*) malloc (sizeof(node));
+            str[i]->next=NULL;
+        }
+    node *p=NULL;
+    int aa;
+    scanf("%d%d",&n,&m);
+    while(n--)//输入n个数
+    {
+        scanf("%d",&aa);
+        hasha(aa);
+    }
+    while(m--)//查询m次
+    {
+        scanf("%d",&aa);
+        int bb=aa;
+        aa=aa%mod;
+        p=str[aa];
+        int flog=0;
+        while(p->next)
+        {
+            p=p->next;
+            if(bb==p->x)
+            {
+                flog=1;
+                break;
+            }
+ 
+        }
+        if( flog == 0 )
+            printf("NO\n");
+        else
+            printf("YES\n");
+    }
+    system("pause");
+}
+//https://blog.csdn.net/stffer/article/details/46242075

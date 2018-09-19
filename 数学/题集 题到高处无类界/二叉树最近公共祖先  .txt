@@ -1,60 +1,130 @@
-http://blog.sina.com.cn/s/blog_77dc9e0801013y9p.html
-
-https://www.jianshu.com/p/e647ecbec500
-
-
-#include <stdio.h>
-/*
-  Description: 大顶堆 
-  https://blog.csdn.net/dujian996099665/article/details/8189482
-*/
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include <iostream>
+#include <list>
+using namespace std;
  
-//调整堆，使得元素满足堆的性质
-void MAX_HEAPIFY(int a[],int i,int n){
-      int left  = 2*i+1;
-      int right = left +1;
-      int largest;
-      if(left <n-1){
+//定义二叉树的节点
+struct BinaryTreeNode
+{
+   char m_nvalue;
+   BinaryTreeNode * m_pleft;
+   BinaryTreeNode * m_pright;
+};
+ 
+//创建值为value的节点
+BinaryTreeNode * CreateBinaryTreeNode(char value)
+{
+	BinaryTreeNode * p=new BinaryTreeNode();
+	p->m_nvalue=value;
+	p->m_pleft=NULL;
+	p->m_pright=NULL;
+	return p; 
+}
+ 
+//设置左孩子
+void SetLeftchild(BinaryTreeNode * pRoot,BinaryTreeNode * lchild)
+{
+    if(pRoot==NULL)
+		return;
+    pRoot->m_pleft=lchild;
+}
+ 
+//设置右孩子
+void SetRightchild(BinaryTreeNode * pRoot,BinaryTreeNode * rchild)
+{
+	if(pRoot==NULL)
+		return;
+	pRoot->m_pright=rchild;
+}
+ 
+//保存从根到某节点的路径(最重要函数)
+bool getPath(BinaryTreeNode * pRoot,BinaryTreeNode * pNode,list<BinaryTreeNode *> & List)
+{
+	if(pRoot==NULL || pNode ==NULL)
+		return false;
+    if(pRoot==pNode)
+	{
+	 List.push_back(pRoot);
+	 return true;
+	}
+	List.push_back(pRoot);
+	bool result=getPath(pRoot->m_pleft,pNode,List);
+	if(!result)
+        result=getPath(pRoot->m_pright,pNode,List);
+    if(!result)
+       List.pop_back();
+	return result;
+}
+ 
+BinaryTreeNode * getCommonParent(BinaryTreeNode * pRoot,BinaryTreeNode * pNode1,BinaryTreeNode * pNode2)
+{
+  list<BinaryTreeNode *> List1;
+  list<BinaryTreeNode *> List2;
+  bool result1=getPath(pRoot,pNode1,List1);
+  bool result2=getPath(pRoot,pNode2,List2);
+  if(result1==false || result2==false)
+    return NULL;
+  BinaryTreeNode * commonParent=NULL;
+  list<BinaryTreeNode *>::iterator ite1=List1.begin();
+  list<BinaryTreeNode *>::iterator ite2=List2.begin();
+  for(;ite1!=List1.end() && ite2!=List2.end();ite1++,ite2++)
+  {
+     if(*ite1==*ite2)
+      commonParent=*ite1;
+	 else
+		 break;
+  }
+  return commonParent;
+}
+ 
+void printList(list<BinaryTreeNode *> &List)
+{
+	for(list<BinaryTreeNode *>::iterator ite=List.begin();ite!=List.end();ite++)
+	{
+	   cout<<(*ite)->m_nvalue<<" ";
+	}
+	cout<<endl;
+}
+ 
+//创建一棵如下所示的二叉树
+//                A
+//              /   \
+//             B     C
+//           /   \
+//          D     E
+//        /  \   /  \
+//       F    G  H   I
+//
+ 
+int main()
+{
+  
+    BinaryTreeNode * pA=CreateBinaryTreeNode('A');
+    BinaryTreeNode * pB=CreateBinaryTreeNode('B');
+	BinaryTreeNode * pC=CreateBinaryTreeNode('C');
+	BinaryTreeNode * pD=CreateBinaryTreeNode('D');
+	BinaryTreeNode * pE=CreateBinaryTreeNode('E');
+	BinaryTreeNode * pF=CreateBinaryTreeNode('F');
+	BinaryTreeNode * pG=CreateBinaryTreeNode('G');
+	BinaryTreeNode * pH=CreateBinaryTreeNode('H');
+	BinaryTreeNode * pI=CreateBinaryTreeNode('I');
     
-       if( a[left]>a[right])      largest = left;
-       else    largest = right ;    }    
-     
-   
-   while(largest<n){
-     if(a[i]>=a[largest])return;
-     if(largest != i) {
-                int temp   = a[i];
-                a[i]       = a[largest];
-                a[largest] = temp;              
-                }
-     MAX_HEAPIFY(a,largest,n);
-      }      
-     }
- 
- //建堆，从数组的中间开始，逐个的调整，一直到根    
-void BUID_MAX_HEAP(int a[],int n){
-     for(int i =n/2-1;i>=0;i--)
-       MAX_HEAPIFY(a,i,n);
-     }
- 
-//堆排序，每次都把堆顶元素放到数组的尾部     
-void HEAPSORT(int a[],int n){
-     for(int i = n-1;i>=0;i--)
-     {          int temp   = a[i];
-                a[i]       = a[0];
-                
-                a[0] = temp;
-                //n--;
-                MAX_HEAPIFY(a,0,i);
-                }
-     }   
-//主函数，调用堆排序算法对数组进行排序，输出结果  
-int main(){
-    int a[10]={4,1,3,2,16,9,10,14,8,7};
-    BUID_MAX_HEAP(a,10);
-    HEAPSORT(a,10);
-    for(int i=0;i<10;i++)
-    printf("%d ",a[i]);
-    getchar();
-    return(0);
-    }
+	SetLeftchild(pA,pB);
+	SetRightchild(pA,pC);
+    SetLeftchild(pB,pD);
+	SetRightchild(pB,pE);
+	SetLeftchild(pD,pF);
+	SetRightchild(pD,pG);
+	SetLeftchild(pE,pH);
+	SetRightchild(pE,pI);
+    
+	BinaryTreeNode * p=getCommonParent(pA,pD,pC);
+	if(p!=NULL)
+		cout<<"Common Parent is "<<p->m_nvalue<<endl;
+	system("PAUSE");
+	return 0;
+}
+//https://blog.csdn.net/yunzhongguwu005/article/details/11124491
+

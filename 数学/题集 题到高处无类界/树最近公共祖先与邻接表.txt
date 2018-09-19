@@ -1,0 +1,166 @@
+问题描述：
+　　设计一个算法，对于给定的树中2个结点返回它们的最近公共祖先。
+　　编程任务：
+　　对于给定的树，和树中结点对，编程计算结点对的最近公共祖先。
+
+数据输入：
+　　由文件input.txt给出输入数据。第一行有1个正整数n，表示给定的树有n个顶点，编号为1，2，…，n。编号为1 的顶点是树根。接下来的n 行中，第i+1 行描述与i 个顶点相关联的子结点的信息。每行的第一个正整数k表示该顶点的儿子结点数。其后k个数中，每1 个数表示1 个儿子结点的编号。当k=0 时表示相应的结点是叶结点。文件的第n+2 行是1 个正整数m，表示要计算最近公共祖先的m个结点对。接下来的m行，每行2 个正整数，是要计算最近公共祖先的结点编号。
+
+结果输出:
+　　将编程计算出的m个结点对的最近公共祖先结点编号输出到文件output.txt。每行3 个
+　　正整数，前2 个是结点对编号，第3 个是它们的最近公共祖先结点编号。
+　　输入文件示例 输出文件示例
+input.txt
+　　12
+　　3 2 3 4
+　　2 5 6
+　　0
+　　0
+　　2 7 8
+　　2 9 10
+　　0
+　　0
+　　0
+　　2 11 12
+　　0
+　　0
+　　5
+　　3 11
+　　7 12
+　　4 8
+　　9 12
+　　8 10
+
+output.txt
+　　3 11 1
+　　7 12 2
+　　4 8 1
+　　9 12 6
+　　8 10 2
+
+ 
+
+http://blog.sina.com.cn/s/blog_77dc9e0801013y9p.html
+
+https://www.jianshu.com/p/e647ecbec500
+
+
+#include <cstdio>
+#include <iostream>
+#include <cstring>
+using namespace std;
+#define MAX 105
+
+struct node
+{
+ int v;
+ int next;
+}edges[MAX*MAX];
+
+int n, m;
+int p[MAX][20], deep[MAX];
+int first[MAX], num;
+
+inline void add(int u,int v)
+{
+ edges[num].v = v;
+ edges[num].next = first[u];
+ first[u] = num++;
+}
+
+void read_graph()
+{
+ memset(first,-1,sizeof(first));
+ memset(p,0,sizeof(p));
+ memset(deep,0,sizeof(deep));
+ num = 0;
+ int i, j, t;
+ int v;
+ cout<<"n:"<<n<<"t:"<<t<<endl;
+ for(i = 1; i <= n; ++i)
+ {
+  scanf("%d",&t);
+  for(j = 1; j <= t; ++j)
+  {
+   scanf("%d",&v);
+   add(i,v);
+  }
+ }
+}
+
+void dfs(int u)
+{
+ if(first[u] == -1) return ;
+ for(int e = first[u]; e  != -1; e = edges[e].next)
+ {
+  int v = edges[e].v;
+  p[v][0] = u;
+  int m = u;
+  deep[v] = deep[u]+1;
+  for(int j = 0; p[m][j] != 0; ++j)
+  {
+   p[v][j+1] = p[m][j]; //公式p[v][j] = p[ p[v][j-1] ][j-1];
+   m = p[m][j];  // m: 相当于上面公式p[v][j-1];
+  }
+  dfs(v);
+ }
+}
+
+int LCA(int x,int y)
+{
+ int m, k;
+ if(x == y) return x;
+ if(deep[x] < deep[y])
+ {
+  m = x;
+  x = y;
+  y = m;
+ }
+ m = deep[x] - deep[y];
+ k = 0;
+ while( m ) //调整x和y的深度一样
+ {
+  if(m & 1) x = p[x][k];
+  m >>= 1;
+  k++;
+ }
+ if(x == y) return x;
+ k = 0;
+ while(x != y) //二分查找, 向上调整寻找最近公共祖先.
+ {
+  if( p[x][k] != p[y][k] || p[x][k] == p[y][k] && k == 0)
+  { //如果p[x][k] != p[y][k], 说明p[x][k]节点仍然在所求祖先下面. 继续向上调整
+    //如果相等, 说明就是它们的祖先
+   x = p[x][k];
+   y = p[y][k];
+   k++;
+  }
+  else k--;
+ }
+
+ return x;
+}
+
+
+int main()
+{
+// freopen("input.txt","r",stdin);
+ scanf("%d",&n);
+ 
+  read_graph();
+  dfs(1);
+
+  scanf("%d",&m);
+  int x, y;
+  for(int i = 1; i <= m; ++i)
+  {
+   scanf("%d %d",&x,&y);
+   printf("(%d %d) = %d\n",x,y,LCA(x,y));
+  }
+ 
+ cout<<p[5][1]<<endl;
+ system("pause");
+ return 0;
+}
+
+
