@@ -1,3 +1,14 @@
+给你一个01字符串，答案=该串中最长的连续的1的长度，现在你有至多K次机会，每次机会可以将串中的某个0改成1，现在问最大的可能答案。
+ 
+样例输入： 
+10 2 
+1 0 0 1 0 1 0 1 0 1 
+样例输出： 
+5 
+
+思路：遍历这n个数，将为0 的 push进vec，只考虑vec
+初始最长maxlen为vec[k]-1,vec[k]表示第k+1个0所在位置，vec[k]-1就是初始最大长度，vec[i]-vec[i-k-1]-1 就是将i-k-1到i之间0变为1的长度
+
 #include <iostream>
 
 #include <vector>
@@ -33,52 +44,31 @@ int main() {
 	return 0;
 }
         
+//https://blog.csdn.net/behboyhiex/article/details/82469281
 
 
- #include <iostream>
-#include <cstdio>
-#include <vector>
-using namespace std;
 
-vector<int> vec[100];
-int ans;
-void dfs(int x, int old, int w) {
-    for(int i=0;i<vec[x].size();i++){
-        if(vec[x][i]==old){
-            continue;
-        }
-        dfs(vec[x][i],x,w+1);
-    }
-    ans = max(ans, w);
-}
-int main() {
-    int n;
-    scanf("%d", &n);
-    for(int i = 1; i < n; ++ i) {
-        int x, y;
-        scanf("%d%d", &x, &y);
-        vec[x].push_back(y);
-        vec[y].push_back(x);
-    }
-    for(int i=0;i<=n;i++){
-            for(int j=0;j<vec[i].size();j++){
-        cout<< vec[i][j];}
-    }
-    
-    cout<<""<<endl;
-    ans = 0;
-    dfs(1, -1, 0);
-    printf("%d\n", (n-1)*2-ans);
-     system("pause");
-    return 0;
-}
-   
-#提交代码时，取消以下注释
-##N,K = map(int,input().split())
-##num = list(map(int,input().split()))
+解法二：
+思路
+输入的数组里没有1，那么返回K即机会次数。 
+输入的数组有1，且K>=N-1，那么返回N。
 
-#提交代码时，删除以下代码
-#[1, 0, 0, 1, 0, 1, 0, 1, 0, 1]
+ 
+输入的数组有1，且K小于N-1： 
+那么返回的值，至少应该是1+K.
+想象有个1+K宽度的窗口，在数组上滑动，在某一次滑动时，窗口内有1个1，K个0，这样就用掉K次机会，把窗口内的0都变成1，就形成了连续1串。 
+进一步说（考虑已有1串），如果数组已有的最长连续1子串的长度为max，那么返回的值至少为max+K。（读者可以画图验证）
+
+
+
+程序的整体思路为： 
+滑动窗口slide初始大小为max+K。即slide = max+K。 
+滑动窗口总和sum初始大小为max。即sum = max。
+循环每次检测，当前大小为slide 的滑动窗口，是否有一次滑动使得总和>=sum。 
+有，说明返回结果至少为slide，但还有可能更大，所以slide和sum都++。 
+没有，说明返回结果应该为slide-1，停止循环。
+
+
 N = 10
 K = 2
 num = [1, 0, 0, 1, 1, 1, 0, 1, 0, 1]
@@ -123,11 +113,11 @@ else:
     print(possible -1)
 
 
-https://blog.csdn.net/anlian523/article/details/82498855
+//https://blog.csdn.net/anlian523/article/details/82498855
 
 
-https://blog.csdn.net/behboyhiex/article/details/82469281
 
-http://m.nowcoder.com/discuss/108649
+
+美团点评2019秋招机器学习算法工程师笔试题分享： http://m.nowcoder.com/discuss/108649
 
 https://blog.csdn.net/weixin_36448497/article/details/82468537

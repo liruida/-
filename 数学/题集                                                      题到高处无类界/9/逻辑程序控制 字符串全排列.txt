@@ -1,0 +1,65 @@
+对n个a，m个z组成的字符串全排列，输出第k个字符串/
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <set>
+#include <algorithm>
+#include<vector>
+using namespace std;
+/*1.n个元素的全排列 = （n-1）个元素的全排列 + 另一个元素作为前缀
+2.如果只有一个元素，那么这个元素本身就是它的全排列
+3.不断将每个元素放作第一个元素，然后将这个元素作为前缀，
+并将其余元素继续全排列，等到出口，出口出去后还需要还原数组*/
+void pailie(set<string>& ss, int num, vector<char> chars){
+    if (num == 1){
+        return;
+    }
+    else
+    {
+        char tmpc;
+        string tmpss;
+
+        for (int i = num - 2; i >= 0; i--){
+            tmpc = chars[i];
+            chars[i] = chars[num-1];
+            chars[num-1] = tmpc;
+            for (auto it = chars.begin(); it != chars.end(); ++it){
+                tmpss += *it;
+            }
+            ss.insert(tmpss);
+            tmpss.clear();
+            pailie(ss, num - 1, chars);
+        }
+
+    }
+
+}
+int main(){
+    int n, m, k;
+    int count=0;
+    cin >> n >> m >> k;
+    string tmpss;
+    vector<char> chars;
+    set<string> ss;//set容器，对字符串默认升序排序，并去除重复
+    for (int i = 0; i < n; i++){
+        chars.push_back('a');
+    }
+    for (int j = 0; j < m; j++){
+        chars.push_back('z');
+    }
+    //插入初始字符串，char-》string
+    for (auto it = chars.begin(); it != chars.end(); ++it){
+        tmpss += *it;
+    }
+    ss.insert(tmpss);
+    pailie(ss, n+m, chars);
+    for (auto it = ss.begin(); it != ss.end(); it++){
+        count++;
+        if (count = k - 1){ cout << *it << endl; }
+    }
+
+}
+//https://blog.csdn.net/u012617944/article/details/81869188
+
+https://blog.csdn.net/u014253011/article/details/79685269

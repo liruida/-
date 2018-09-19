@@ -1,3 +1,14 @@
+给一个由数字组成的字符串。求出其可能恢复为的所有IP地址。
+
+样例；
+
+给出字符串 "25525511135"，所有可能的IP地址为：
+
+
+  "255.255.11.135",
+  "255.255.111.35"
+
+回溯与剪枝
 #include <iostream>
 #include <cstdio>
 #include <vector>
@@ -84,3 +95,4 @@ int main(){
     cout<<""<<endl;
     system("pause");
     }
+//https://blog.csdn.net/u014253011/article/details/80003075
