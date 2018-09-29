@@ -1,0 +1,141 @@
+2.
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+using namespace std;
+#include <vector>
+
+bool dfs(int i,vector <int> &distOfGS,vector <int> &allowedGasoline,vector <int> &reslist,int distance,int &initialGasoline){
+     int numOfGS=distOfGS.size();
+    if(i<numOfGS-1 && initialGasoline<distOfGS[i+1]-distOfGS[i]){
+         initialGasoline=initialGasoline+allowedGasoline[i];
+         if(initialGasoline<distOfGS[i+1]-distOfGS[i]||(i==numOfGS-1&& initialGasoline<distance-distOfGS[i] )){cout<<"²»¿É´ï";return -1;} 
+         reslist.push_back(distOfGS[i]) ;
+         initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]); 
+         dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline);                              
+    }else{
+          
+         ;
+          }
+}
+int minGasStation(int numOfGS, vector<int> & distOfGS, vector<int> & allowedGasoline, int distance, int initialGasoline)       
+{
+   
+    if(initialGasoline<distOfGS[0]){return -1;}
+    vector <int> reslist;
+    initialGasoline=initialGasoline-distOfGS[0];
+    dfs(0,distOfGS,allowedGasoline,reslist,distance,initialGasoline); 
+    for(int i=0;i<reslist.size();i++){
+           
+           cout<<reslist[i]<<endl;
+        
+            }    
+    return reslist.size();
+}
+int main(){
+    int numOfGS,distance,initialGasoline;
+    cin>>numOfGS;
+    vector <int> distOfGS;
+    vector <int> allowedGasoline;
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           distOfGS.push_back(temp);
+        
+            }
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           allowedGasoline.push_back(temp);
+        
+            }  
+    cin>>distance>>initialGasoline;
+    distOfGS.push_back(distance);
+    allowedGasoline.push_back(0);
+            
+    int res=minGasStation(numOfGS,distOfGS,allowedGasoline,distance,initialGasoline);
+    cout<<res<<endl;
+    system("pause");
+    }
+
+
+
+1.
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+using namespace std;
+#include <vector>
+
+int sort(vector<int> &arr,int &xiabiao){
+    int max=0;
+   
+            
+    for(int i=0;i<arr.size();i++){
+      
+        if(arr[i]>max){
+            xiabiao=i;
+        }
+       max=max>arr[i]?max:arr[i];
+        
+    }
+    //cout<<xiabiao<<endl;
+    //cout<<max<<endl;
+    return max;
+}
+int sum(vector<int> &arr){
+    int sum=0;
+    
+    for(int i=0;i<arr.size();i++){
+        if(arr[i]>0){    
+       sum+=arr[i];
+       }
+        
+    }
+    return sum;
+}
+
+
+int minNumberOfProjects(int num, int projCmptDec, int restDec, vector<int> &arr)
+           {
+                                   
+   int count=0;
+    int xiabiao=0;
+    int temp=0;
+    
+    //cout<<sum(arr)<<endl;
+    
+    while(sum(arr)>0){
+    
+    temp= sort(arr,xiabiao);
+     cout<<temp<<endl;
+     arr[xiabiao] =temp-projCmptDec;
+     for(int i=0;i<arr.size();i++){
+         if(i!=xiabiao){
+             arr[i]=arr[i]-restDec;
+         }
+         
+     }
+      count++;  
+    }
+   return count; 
+}
+int main(){
+    int num,projCmptDec,restDec;
+    cin>>num>>projCmptDec>>restDec;
+    vector <int> arr;
+    
+    for(int i=0;i<num;i++){
+            int temp;
+           cin>>temp;
+           arr.push_back(temp);
+        
+            }
+            
+    int res=minNumberOfProjects(num,projCmptDec, restDec,arr);
+    cout<<res<<endl;
+    system("pause");
+    }
+

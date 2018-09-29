@@ -1,0 +1,27 @@
+#include <stdio.h>
+int f(const char* s1, const char* s2)
+{  
+    while (*s1)
+    {
+        if (*s1==*s2)
+        {
+            ++s2;
+            if (!*s2)
+            {
+                return 1;
+            }
+        }
+        ++s1;
+    }
+    return 0;
+}
+int  main()
+{
+    char* inf[]={ "²»ÄÜ", "ÄÜ" };
+    printf("%s\n", inf[f("xyxzwaxbd", "yxad")]);
+    system("pause");
+    return 0;
+}
+//https://blog.csdn.net/u013240812/article/details/49533323
+//https://blog.csdn.net/cqs_experiment/article/details/17164407?locationNum=8&fps=1
+//https://zhidao.baidu.com/question/686605594537685492.html?qbl=relate_question_0

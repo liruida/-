@@ -1,0 +1,120 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+vector <int> arr;
+int whole(int num){  
+     int n=num;
+     for(int i=1;i<n;i++){
+            if(num%i==0){arr.push_back(i);} 
+            n--;
+             }  
+             int sum=0;
+       for(int i=0;i<arr.size();i++){
+               cout<<arr[i];
+               sum+=arr[i];
+       
+             }
+             if(sum==num){return 1;}
+             else{return 0;}
+}
+int main(){
+    int num;
+    cin>>num;
+    int res=whole(num);
+   cout<<res<<endl;
+    system("pause");
+    return 0;
+}
+
+此处的树可理解为图，存储方法有邻接表与邻接矩阵两种
+
+题二可以看作是拓扑排序（树中加入回溯）
+#include <cstring>
+#include <iostream>
+using namespace std;
+
+bool flag = false;
+void swap(char **arr, int s, int i);
+void fun(char **arr, int n, int k);
+bool judge(char **arr, int n);
+
+int main() {
+    int n;
+    cin >> n;
+    char **arr = new char*[n];
+    for (int i = 0; i < n; ++i) {
+        arr[i] = new char[100];
+        memset(arr[i], 0, sizeof arr[i]);
+        cin >> arr[i];
+    }
+    cout << judge(arr, n) << endl;
+    system("pause");
+    return 0;
+}
+
+bool judge(char **arr, int n) {
+    fun(arr, n, 0);
+    if (flag)
+        return true;
+    else
+        return false;
+}
+
+void fun(char **arr, int n, int k) {
+    if (k == n) {  
+        //for (int i = 0; i < n; ++i)
+        //  cout << arr[i] << '\t';
+        //cout << endl;
+        flag = true;
+        return;  
+    } 
+   //k一直是从0开始，i依次向后作为第一个开始的从k回溯寻找     
+    for (int i = k; i < n; ++i) {  
+        if (k > 0 && (arr[k-1][strlen(arr[k-1])-1] == arr[i][0])) {  //k!=0，之前的0-k-1个字符串已经排好序，则判断k-1号字符串与之后的字符串
+            swap(arr, k, i);  
+            fun(arr, n, k+1);  
+            swap(arr, k, i);  
+        }
+        else if ( k==0 ) {  //k=0，即第一个字符串与所有的字符串判断
+            swap(arr, k, i);  
+            fun(arr, n, k+1); //依次往后试验  思想等同暴力解，实现用了回溯 ，此题中无法利用中间结果，暴力解即为最优  
+            swap(arr, k, i);  //如果不成功再换回来   类似回退 
+        }  
+        else
+            ;
+    } 
+    return; 
+}  
+
+void swap(char **arr, int k, int i) { //arr[k]与 arr[i]互换 
+    char *temp = new char[100];
+    memset(temp, 0, 100);
+    strcpy(temp, arr[k]);  
+    strcpy(arr[k], arr[i]);  
+    strcpy(arr[i], temp);
+    delete[] temp;
+}  
+https://blog.csdn.net/lmq_begood/article/details/52275570
+https://blog.csdn.net/jeffleo/article/details/54576941
+https://blog.csdn.net/rhx_qiuzhi/article/details/52402853
+许多优秀的算法都用到了递归，但有递归不一定是回溯，但回溯用到递归的可能性很大。
+回溯是暴力法（全排列）的一种，此处中间结果无法利用，因为AB不能排成，不能将AB绑定，CBA可能排成，所以回溯暴力搜索是对后面结果的截断，而动态规划是对中间结果的利用实现省略后面情况的不必要试探，此题若要优化，需要从数学层面进一步思考，是欧拉回路问题，考虑出度入度的数学关系。
+
+欧卡回路原理详解：https://blog.csdn.net/qq_35772697/article/details/52716527
+
+
+https://blog.csdn.net/kongming_acm/article/details/6289862   邻接表实现
+
+https://blog.csdn.net/weixin_38450840/article/details/79798799
+
+二维数组操作
+二维数组中的查找
+https://www.nowcoder.com/questionTerminal/abc3fe2ce8e146608e868a70efebf62e?toCommentId=1983321
+
+N皇后 暴力搜索之回溯
+https://blog.csdn.net/Hackbuteer1/article/details/6657109
+
+树里加入动规就是最小生成树等等
+
+布隆位图法就是哈希 equal()的方法

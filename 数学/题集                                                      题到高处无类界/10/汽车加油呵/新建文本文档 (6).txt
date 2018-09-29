@@ -1,0 +1,108 @@
+https://blog.csdn.net/willinglive/article/details/38148805
+
+https://blog.csdn.net/qq_26811393/article/details/51872221
+
+https://blog.csdn.net/u013761036/article/details/44308379
+
+https://blog.csdn.net/u013295276/article/details/78907949
+
+https://blog.csdn.net/Sterben_Da/article/details/50562462
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+using namespace std;
+#include <vector>
+
+bool dfs(int i,vector <int> &distOfGS,vector <int> &allowedGasoline,vector <int> &reslist,int distance,int &initialGasoline,bool &flag){
+     int numOfGS=distOfGS.size();
+     
+    if(i<numOfGS-1 && initialGasoline<distOfGS[i+1]-distOfGS[i]){
+         initialGasoline=initialGasoline+allowedGasoline[i];
+         if(initialGasoline<distOfGS[i+1]-distOfGS[i]||(i==numOfGS-1&& initialGasoline<distance-distOfGS[i] )){cout<<"²»¿É´ï";flag=false;return false;} 
+        
+         reslist.push_back(distOfGS[i]) ;
+         cout<< distOfGS[i]<<""<<i<<endl;
+         initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]); 
+         
+         dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline,flag);                              
+    }if(i<numOfGS-1 && initialGasoline>=distOfGS[i+1]-distOfGS[i]){
+          initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]);
+         
+           dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline,flag);  
+          
+         
+          }
+    return flag;
+}
+int minGasStation(int numOfGS, vector<int> & distOfGS, vector<int> & allowedGasoline, int distance, int initialGasoline)       
+{
+   
+    if(initialGasoline<distOfGS[0]){return -1;}
+    int initialGasolineinitialGasoline=initialGasoline;
+    vector <int> reslist;
+    initialGasoline=initialGasoline-distOfGS[0];
+    bool flag=true;
+    int i=0;
+    dfs(i,distOfGS,allowedGasoline,reslist,distance,initialGasoline,flag); 
+    cout<<"flag:"<<flag<<endl;
+    if(!flag){cout<<"false"<<endl;}
+    for(int j=0;j<reslist.size();j++){
+           
+           cout<<reslist[j]<<endl;
+        
+            }
+       
+    int temp=0;
+    int ss=reslist.size();
+      while(!flag&&ss<distOfGS.size()) {
+                
+            for(int k=0;k<distOfGS.size();k++){
+                    if(distOfGS[k]==reslist[0]){temp=k;break;}
+                    
+                    }   
+           for(int k=0;k<reslist.size();k++){
+           reslist.pop_back();
+                    
+                    } 
+                         
+      initialGasoline= initialGasolineinitialGasoline+allowedGasoline[temp]; 
+      flag=true; 
+      if(temp-1>=0) {                                                        
+      dfs(temp-1,distOfGS,allowedGasoline,reslist,distance,initialGasoline,flag);      
+            
+         }     
+            
+             for(int j=0;j<reslist.size();j++){
+           
+              cout<<reslist[j]<<endl;
+        }      
+        }   
+    return reslist.size();
+}
+int main(){
+    int numOfGS,distance,initialGasoline;
+    cin>>numOfGS;
+    vector <int> distOfGS;
+    vector <int> allowedGasoline;
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           distOfGS.push_back(temp);
+        
+            }
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           allowedGasoline.push_back(temp);
+        
+            }  
+    cin>>distance>>initialGasoline;
+    distOfGS.push_back(distance);
+    allowedGasoline.push_back(0);
+            
+    int res=minGasStation(numOfGS,distOfGS,allowedGasoline,distance,initialGasoline);
+    cout<<res<<endl;
+    system("pause");
+    }

@@ -1,0 +1,153 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+using namespace std;
+#include <vector>
+
+bool dfs(int i,vector <int> &distOfGS,vector <int> &allowedGasoline,vector <int> &reslist,int distance,int &initialGasoline){
+     int numOfGS=distOfGS.size();
+    if(i<numOfGS-1 && initialGasoline<distOfGS[i+1]-distOfGS[i]){
+         initialGasoline=initialGasoline+allowedGasoline[i];
+         if(initialGasoline<distOfGS[i+1]-distOfGS[i]||(i==numOfGS-1&& initialGasoline<distance-distOfGS[i] )){cout<<"不可达";return -1;} 
+         reslist.push_back(distOfGS[i]) ;
+         cout<< distOfGS[i]<<""<<i<<endl;
+         initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]); 
+         
+         dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline);                              
+    }if(i<numOfGS-1 && initialGasoline>=distOfGS[i+1]-distOfGS[i]){
+          initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]);
+         
+          dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline);  
+          
+         ;
+          }
+}
+int minGasStation(int numOfGS, vector<int> & distOfGS, vector<int> & allowedGasoline, int distance, int initialGasoline)       
+{
+   
+    if(initialGasoline<distOfGS[0]){return -1;}
+    vector <int> reslist;
+    initialGasoline=initialGasoline-distOfGS[0];
+    dfs(0,distOfGS,allowedGasoline,reslist,distance,initialGasoline); 
+    for(int i=0;i<reslist.size();i++){
+           
+           cout<<reslist[i]<<endl;
+        
+            }    
+    return reslist.size();
+}
+int main(){
+    int numOfGS,distance,initialGasoline;
+    cin>>numOfGS;
+    vector <int> distOfGS;
+    vector <int> allowedGasoline;
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           distOfGS.push_back(temp);
+        
+            }
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           allowedGasoline.push_back(temp);
+        
+            }  
+    cin>>distance>>initialGasoline;
+    distOfGS.push_back(distance);
+    allowedGasoline.push_back(0);
+            
+    int res=minGasStation(numOfGS,distOfGS,allowedGasoline,distance,initialGasoline);
+    cout<<res<<endl;
+    system("pause");
+    }
+
+
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+using namespace std;
+#include <vector>
+
+bool dfs(int i,vector <int> &distOfGS,vector <int> &allowedGasoline,vector <int> &reslist,int distance,int &initialGasoline){
+     int numOfGS=distOfGS.size();
+    
+    if(i<numOfGS-1 && initialGasoline<distOfGS[i+1]-distOfGS[i]){
+      cout<<"i:"<<i<<endl;
+         initialGasoline=initialGasoline+allowedGasoline[i];
+         reslist.push_back(distOfGS[i]) ;
+         if(initialGasoline<distOfGS[i+1]-distOfGS[i]||(i+1==numOfGS-1&& initialGasoline<distance-distOfGS[i] )){cout<<"不可达";return false;} 
+         
+      
+         initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]); 
+         
+         dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline);                              
+    }if(i<numOfGS-1 && initialGasoline>=distOfGS[i+1]-distOfGS[i]){
+                    
+          initialGasoline=initialGasoline-(distOfGS[i+1]-distOfGS[i]);
+          cout<<" initialGasoline:"<< initialGasoline<<endl ;
+          int ii=i;
+          int initialGasolineinitialGasoline=initialGasoline;
+          int size=reslist.size();
+
+         if(!(dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline))) {
+                                                                                
+            int k=0;
+            while(k<size){
+              reslist.pop_back();            
+            }
+            
+             initialGasoline=initialGasolineinitialGasoline+allowedGasoline[i];
+            
+             reslist.push_back(distOfGS[i]) ;
+             dfs(i+1,distOfGS,allowedGasoline,reslist,distance,initialGasoline);
+             }
+          
+         
+          }
+        return true; 
+      
+       
+}
+int minGasStation(int numOfGS, vector<int> & distOfGS, vector<int> & allowedGasoline, int distance, int initialGasoline)       
+{
+   
+    if(initialGasoline<distOfGS[0]){return -1;}
+    vector <int> reslist;
+    initialGasoline=initialGasoline-distOfGS[0];
+    dfs(0,distOfGS,allowedGasoline,reslist,distance,initialGasoline); 
+    for(int i=0;i<reslist.size();i++){
+           
+           cout<<reslist[i]<<endl;
+        
+            }    
+    return reslist.size();
+}
+int main(){
+    int numOfGS,distance,initialGasoline;
+    cin>>numOfGS;
+    vector <int> distOfGS;
+    vector <int> allowedGasoline;
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           distOfGS.push_back(temp);
+        
+            }
+    for(int i=0;i<numOfGS;i++){
+            int temp;
+           cin>>temp;
+           allowedGasoline.push_back(temp);
+        
+            }  
+    cin>>distance>>initialGasoline;
+    distOfGS.push_back(distance);
+    allowedGasoline.push_back(0);
+            
+    int res=minGasStation(numOfGS,distOfGS,allowedGasoline,distance,initialGasoline);
+    cout<<res<<endl;
+    system("pause");
+    }

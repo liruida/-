@@ -1,0 +1,453 @@
+Ìâ2 ×ÖµäÊ÷
+https://blog.csdn.net/aluea_xn/article/details/77800587
+
+https://blog.csdn.net/qq_34927456/article/details/78040348
+
+https://blog.csdn.net/ns_code/article/details/21183495
+
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+
+int main(){
+   
+   
+       
+    char str[0];
+    gets(str);  //str¿ÉÒÔ½ÓÊÜÓÐ¿Õ¸ñµÄ×Ö·û 
+    string s;
+    s=str;
+    unsigned int iSize = s.size();
+        cout << iSize << endl;   
+        
+     vector<int> result;
+        unsigned int i = 0;
+        int iCount = 0;
+        for(i = 0; i < iSize; i++)
+        {
+                if('/' == s[i])
+                {
+                       result.push_back(i);
+                }
+        }
+ 
+    for(int i=0;i<result.size();i++){
+        cout<< result[i];
+    }
+    cout<<""<<endl;
+    unsigned int start=0;
+    int subsize=0;
+    if(result[result.size()-1]==iSize-1){
+           start=result[result.size()-2];
+           subsize=result[result.size()-1]-result[result.size()-2];
+       }else{
+           start=result[result.size()-1];  
+           subsize=iSize-result[result.size()-1];
+             }
+    
+        cout << iCount << endl; // 3
+	cout <<s.substr(start,subsize)<<endl;
+    cout<<""<<endl;
+    system("pause");
+    }
+
+
+#include <vector>
+#include <iostream>
+using namespace std;
+
+bool HasPathHelp(char array[],int col,int row,int cols,int rows, char *str,int &pathlength,bool *visited )
+{
+	if(str[pathlength]=='\0')
+		return true;
+	bool haspath=false;
+	if(row>=0 && row<rows && col >=0 && col <cols
+		&& array[row*cols+col]==str[pathlength]
+		&& !visited[row*cols+col])
+		{
+			++pathlength;
+			visited[row*cols+col]=true;
+			haspath=HasPathHelp(array,col-1,row,cols,rows,str,pathlength,visited)  //left
+				||  HasPathHelp(array,col,row-1,cols,rows,str,pathlength,visited)       //up
+				||  HasPathHelp(array,col+1,row,cols,rows,str,pathlength,visited)      //right
+				||  HasPathHelp(array,col,row+1,cols,rows,str,pathlength,visited);     //down
+			if(!haspath)
+			{
+				--pathlength;
+				visited[row*cols+col]=false;
+			}
+		}
+		return haspath;
+}
+ 
+ 
+bool HasPath(char array[],int rows, int cols,char *str)
+{
+	if(array==NULL || rows<1 || cols<1 || str==NULL)
+		return false;
+	bool *visited=new bool[rows*cols];
+	for(int i=0;i<rows*cols;i++){
+            visited[i]=0;
+            }
+//	memset(visited,0,rows*cols);
+	int pathlength=0;
+	for(int row=0;row<rows;row++)
+	{
+		for(int col=0;col<cols;col++)
+		{
+			if(HasPathHelp(array,col,row,cols,rows,str,pathlength,visited))
+				return true;
+		}
+	}
+	delete []visited;
+	return false;
+}
+ 
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int k;
+    cin>>k;
+    vector<string> vec;
+    char arr[m*n];
+    for(int i=0;i<m*n;i++){
+            cin>>arr[i];
+           
+            }
+     cin.get();       
+    for(int i=0;i<k;i++){
+       char strr[0];
+       gets(strr); 
+    //char strr[6]="bcced";
+	bool result=HasPath(arr,m,n,strr);
+	if(result){
+          vec. push_back(strr) ;   
+		//cout<<"¸Ã¾ØÕó"<<arr<<"°üº¬"<<strr<<"×Ö·û´®"<<endl;
+	}
+}
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+	system("pause");
+	return 0;
+}
+
+
+#include <vector>
+#include <iostream>
+using namespace std;
+
+bool HasPathHelp(char array[],int col,int row,int cols,int rows, char *str,int &pathlength,bool *visited )
+{
+	if(str[pathlength]=='\0')
+		return true;
+	bool haspath=false;
+	if(row>=0 && row<rows && col >=0 && col <cols
+		&& array[row*cols+col]==str[pathlength]
+		&& !visited[row*cols+col])
+		{
+			++pathlength;
+			visited[row*cols+col]=true;
+			haspath=HasPathHelp(array,col-1,row,cols,rows,str,pathlength,visited)  //left
+				||  HasPathHelp(array,col,row-1,cols,rows,str,pathlength,visited)       //up
+				||  HasPathHelp(array,col+1,row,cols,rows,str,pathlength,visited)      //right
+				||  HasPathHelp(array,col,row+1,cols,rows,str,pathlength,visited);     //down
+			if(!haspath)
+			{
+				--pathlength;
+				visited[row*cols+col]=false;
+			}
+		}
+		return haspath;
+}
+ 
+ 
+bool HasPath(char array[],int rows, int cols,char *str)
+{
+	if(array==NULL || rows<1 || cols<1 || str==NULL)
+		return false;
+	bool *visited=new bool[rows*cols];
+	for(int i=0;i<rows*cols;i++){
+            visited[i]=0;
+            }
+//	memset(visited,0,rows*cols);
+	int pathlength=0;
+	for(int row=0;row<rows;row++)
+	{
+		for(int col=0;col<cols;col++)
+		{
+			if(HasPathHelp(array,col,row,cols,rows,str,pathlength,visited))
+				return true;
+		}
+	}
+	delete []visited;
+	return false;
+}
+ 
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int k;
+    cin>>k;
+    vector<string> vec;
+    vector<string> find;
+    
+     cin.get();       
+    for(int i=0;i<k;i++){
+       char sstrr[0];
+       gets(sstrr);
+      find. push_back(sstrr) ; 
+      } 
+      for(int i=0;i<find.size();i++){
+        cout<< "find[i]"<<find[i]<<endl;;
+    }
+    //char strr[6]="bcced";
+    char arr[m*n];
+    for(int i=0;i<m*n;i++){
+            cin>>arr[i];
+           
+            }
+    for(int i=0;i<find.size();i++){
+          string strrr= find[i];
+          unsigned int iSize = strrr.size();
+          
+          char strr[iSize];
+          for(i = 0; i < iSize; i++)
+        {
+             strr[i]=strrr[i];
+        }
+         	cout<<"strr"<<strr<<endl; 
+	bool result=HasPath(arr,m,n,strr);
+	if(result){
+          vec. push_back(strr) ;   
+		cout<<"¸Ã¾ØÕó"<<arr<<"°üº¬"<<strr<<"×Ö·û´®"<<endl;
+	}
+}
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+	system("pause");
+	return 0;
+}
+https://blog.csdn.net/gogokongyin/article/details/51788250
+
+
+#include <vector>
+#include <iostream>
+#include<sstream>
+using namespace std;
+
+bool HasPathHelp(char array[],int col,int row,int cols,int rows, char *str,int &pathlength,bool *visited )
+{
+	if(str[pathlength]=='\0')
+		return true;
+	bool haspath=false;
+	if(row>=0 && row<rows && col >=0 && col <cols
+		&& array[row*cols+col]==str[pathlength]
+		&& !visited[row*cols+col])
+		{
+			++pathlength;
+			visited[row*cols+col]=true;
+			haspath=HasPathHelp(array,col-1,row,cols,rows,str,pathlength,visited)  //left
+				||  HasPathHelp(array,col,row-1,cols,rows,str,pathlength,visited)       //up
+				||  HasPathHelp(array,col+1,row,cols,rows,str,pathlength,visited)      //right
+				||  HasPathHelp(array,col,row+1,cols,rows,str,pathlength,visited);     //down
+			if(!haspath)
+			{
+				--pathlength;
+				visited[row*cols+col]=false;
+			}
+		}
+		return haspath;
+}
+ 
+ 
+bool HasPath(char array[],int rows, int cols,char *str)
+{
+	if(array==NULL || rows<1 || cols<1 || str==NULL)
+		return false;
+	bool *visited=new bool[rows*cols];
+	for(int i=0;i<rows*cols;i++){
+            visited[i]=0;
+            }
+//	memset(visited,0,rows*cols);
+	int pathlength=0;
+	for(int row=0;row<rows;row++)
+	{
+		for(int col=0;col<cols;col++)
+		{
+			if(HasPathHelp(array,col,row,cols,rows,str,pathlength,visited))
+				return true;
+		}
+	}
+	delete []visited;
+	return false;
+}
+ 
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int k;
+    cin>>k;
+    vector<string> vec;
+    vector<string> find;
+    vector<int> kongge;
+    kongge.push_back(0);
+     cin.get();  
+     char ssstrr[0];
+     gets(ssstrr);
+     string sstrr;
+    sstrr=ssstrr;
+    string result;
+    stringstream input(sstrr);
+    while(input>>result){
+        find.push_back(result);
+        }
+      for(int i=0;i<find.size();i++){
+        cout<< "find[]"<<i<<":"<<find[i]<<endl;;
+    }
+    //char strr[6]="bcced";
+    char arr[m*n+1];
+    for(int i=0;i<m*n;i++){
+            cin>>arr[i];
+           
+            }
+    for(int i=0;i<find.size();i++){
+          string strrr= find[i];
+          char *strr;
+          strcpy(strr,strrr.c_str());
+          
+         	cout<<"strr"<<strr<<endl; 
+	bool rresult=HasPath(arr,m,n,strr);
+	if(rresult){
+          vec. push_back(strr) ;   
+		  cout<<"¸Ã¾ØÕó"<<arr<<"°üº¬"<<strr<<"×Ö·û´®"<<endl;
+	}
+}
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+	system("pause");
+	return 0;
+}
+
+AC
+#include <vector>
+#include <iostream>
+#include<sstream>
+using namespace std;
+
+bool HasPathHelp(char array[],int col,int row,int cols,int rows, char *str,int &pathlength,bool *visited )
+{
+	if(str[pathlength]=='\0')
+		return true;
+	bool haspath=false;
+	if(row>=0 && row<rows && col >=0 && col <cols
+		&& array[row*cols+col]==str[pathlength]
+		&& !visited[row*cols+col])
+		{
+			++pathlength;
+			visited[row*cols+col]=true;
+			haspath=HasPathHelp(array,col-1,row,cols,rows,str,pathlength,visited)  //left
+				||  HasPathHelp(array,col,row-1,cols,rows,str,pathlength,visited)       //up
+				||  HasPathHelp(array,col+1,row,cols,rows,str,pathlength,visited)      //right
+				||  HasPathHelp(array,col,row+1,cols,rows,str,pathlength,visited);     //down
+			if(!haspath)
+			{
+				--pathlength;
+				visited[row*cols+col]=false;
+			}
+		}
+		return haspath;
+}
+ 
+ 
+bool HasPath(char array[],int rows, int cols,char *str)
+{
+	if(array==NULL || rows<1 || cols<1 || str==NULL)
+		return false;
+	bool *visited=new bool[rows*cols];
+	for(int i=0;i<rows*cols;i++){
+            visited[i]=0;
+            }
+//	memset(visited,0,rows*cols);
+	int pathlength=0;
+	for(int row=0;row<rows;row++)
+	{
+		for(int col=0;col<cols;col++)
+		{
+			if(HasPathHelp(array,col,row,cols,rows,str,pathlength,visited))
+				return true;
+		}
+	}
+	delete []visited;
+	return false;
+}
+ 
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    int k;
+    cin>>k;
+    vector<string> vec;
+    vector<string> find;
+    vector<int> kongge;
+    kongge.push_back(0);
+     cin.get();  
+     char ssstrr[0];
+     gets(ssstrr);
+     string sstrr;
+    sstrr=ssstrr;
+    string result;
+    stringstream input(sstrr);
+    while(input>>result){
+        find.push_back(result);
+        }
+      for(int i=0;i<find.size();i++){
+       
+    }
+    //char strr[6]="bcced";
+    char arr[m*n+1];
+    for(int i=0;i<m*n;i++){
+            cin>>arr[i];
+           
+            }
+            
+            
+    for(int i=0;i<find.size();i++){
+          string strrr= find[i];
+        
+          //char *strr;
+          //strcpy(strr,strrr.c_str());
+          unsigned int iSize = strrr.size();
+          
+          char strr[iSize+1];
+          for(int j=0; j < iSize; j++)
+        {
+             strr[j]=strrr[j];
+        }
+        strr[iSize]='\0';
+         	cout<<"strr"<<strr<<endl; 
+	bool rresult=HasPath(arr,m,n,strr);
+	if(rresult){
+          vec. push_back(strr) ;   
+		  cout<<"¸Ã¾ØÕó"<<arr<<"°üº¬"<<strr<<"×Ö·û´®"<<endl;
+	}
+}
+
+
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+	system("pause");
+	return 0;
+}
+
+

@@ -1,0 +1,17 @@
+CTF是一种考量选手网络安全知识素养、解决难题能力和攻防技术水平的比赛。选手需要具备的技能包括密码破译、信息隐藏、二进制分析、逆向工程、移动安全、漏洞挖掘与利用、Web渗透、电子取证、程序编程等。在各大CTF赛事中，全球最有影响力的莫过于 DEFCON CTF，堪称该类比赛的世界杯。
+
+https://www.ichunqiu.com/courses/ctf/nandu-chu
+
+春秋课堂
+
+ttps://www.leavesongs.com/PENETRATION/use-target-to-spoof-fishing.html
+
+http://www.shiyanbar.com/course-video/watchVideo/cid/473/vid/2227
+
+https://blog.csdn.net/qq_19861715/article/details/79428140
+
+https://blog.csdn.net/gwenchill/article/details/46679621
+
+https://blog.csdn.net/qq_35033983/article/details/78419723
+
+https://blog.csdn.net/syh_486_007/article/details/72832845

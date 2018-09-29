@@ -18,65 +18,17 @@ https://blog.csdn.net/behboyhiex/article/details/82469281
 思路：一共n-1条边，每个边走两次，一共2*（n-1） ，有边不走两次，也就是不回头，减去一次，当走的路径为最大深度deep时候，总路程最小为2*（n-1）-deep
 此文件中解法简洁，另一种解法在文件路径： 图论\树\树的深度优先遍历 即先序 中序 后序遍历\从某一点出发访问完所有路径的最小值中
 
+push_back()表示从尾部继续插入，则数据输入的最终结果为：
+vec:
+     i    0   1   2   3   4
+             2,3  1   1  1,4  3    含义：1与2 3通 2与1通……
+dfs(1, -1, 0)求解最长的路径ans;从某一点出发访问其他所有节点并回返存在数学关系 （n-1）*2,例    1     为3*2=6，而其中最长的那条由题意得无需回返，故减去之。
+       / | \
+       2 3 4
+dfs(1, -1, 0)中1表示去求从1开始去访问所有点，-1此位置的数若是有表示此节点已经被访问过在已经选的路径里，之前的未被选入则后面再选一定也不会再被选入，此方法节省了去声明状态记录数组的空间，（若有闭包的情况需要另行考虑，参加习题重要城市）则continue，continue表示下面的dfs(vec[x][i],x,w+1)不执行，直接i++;  0表示长度，不断更新所求的ans。
+
+
 #include <iostream>
-
-#include <vector>
-using namespace std;
-vector<int> vec;
-int main() {
-    int n,k,x;
-    n=0;
-    k=0;
-    x=0;
-    cin>>n>>k;
-    for(int i=1;i<=n;i++){
-        cin>>x;
-        
-        if(x==0)
-        { 
-                vec.push_back(i);}
-    }
-    for(int i=0;i<vec.size();i++){
-        cout<< vec[i];
-    }
-    cout<<""<<endl;
-    int maxlen=0;
-     maxlen=vec[k]-1;
-    for(int i=k+1;i<vec.size();i++){
-        int tmp=vec[i]-vec[i-k-1]-1;
-        cout<<"tmp:"<<tmp;
-        maxlen=max(maxlen,tmp);
-        cout<<"maxlen:"<<maxlen;
-    }
-	cout<<maxlen<<endl;
-	system("pause");
-	return 0;
-}
-        
-
-
-
-题目二：最长全1串
-给你一个01串，定义答案=该串中最长的连续1的长度，现在有k次机会将某个0改为1，现在问最大可能答案
-
-输入：第一行 n k
-
-第二行 n个数 
-
-样例：
-
-输入：
-10 2
-1 0 0 1 0 1 0 1 0 1
-输出：
-
-5
-
-思路：遍历这n个数，将为0 的 push进vec，只考虑vec
-初始最长maxlen为vec[k]-1,vec[k]表示第k+1个0所在位置，vec[k]-1就是初始最大长度，vec[i]-vec[i-k-1]-1 就是将i-k-1到i之间0变为1的长度
-
-
- #include <iostream>
 #include <cstdio>
 #include <vector>
 using namespace std;
@@ -114,3 +66,70 @@ int main() {
     return 0;
 }
    
+
+
+
+        
+
+
+
+题目二：最长全1串
+给你一个01串，定义答案=该串中最长的连续1的长度，现在有k次机会将某个0改为1，现在问最大可能答案
+
+输入：第一行 n k
+
+第二行 n个数 
+
+样例：
+
+输入：
+10 2
+1 0 0 1 0 1 0 1 0 1
+输出：
+
+5
+
+思路：遍历这n个数，将为0 的 push进vec，只考虑vec
+初始最长maxlen为vec[k]-1,vec[k]表示第k+1个0所在位置，vec[k]-1就是初始最大长度，vec[i]-vec[i-k-1]-1 就是将i-k-1到i之间0变为1的长度
+下标：1 2 3 4 5 6 7 8 9 10
+      1 0 0 1 0 1 0 1 0 1
+
+i:    0 1 2 3 4
+vec:  2 3 5 7 9
+vec表示0的各个位置  k=2，可以填补两个0的空位，初始化maxlen=v[2]-1=4,表示第3个0的前面都是1，v[2]是第3个0的坐标，-1表示减去它自己，然后i从k的位置开始循环到vec.size()-1的位置，依次填补第2 3；3 4；4 5……位置的0；当填补2 3时其长度是第1个0到第4个0的位置长度-2+1；所以tmp=vec[i]-vec[i-k-1]-1;i从i=k+1始。v[3]是第四个位置的0.其中i的开始位置与tmp的计算公式是需要反复斟酌的地方，举出针对i控制的特例，如填补2 3时其长度的情况是简化思考的方法。
+
+#include <iostream>
+
+#include <vector>
+using namespace std;
+vector<int> vec;
+int main() {
+    int n,k,x;
+    n=0;
+    k=0;
+    x=0;
+    cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        cin>>x;
+        
+        if(x==0)
+        { 
+                vec.push_back(i);}
+    }
+    for(int i=0;i<vec.size();i++){
+        cout<< vec[i];
+    }
+    cout<<""<<endl;
+    int maxlen=0;
+     maxlen=vec[k]-1;
+    for(int i=k+1;i<vec.size();i++){
+        int tmp=vec[i]-vec[i-k-1]-1;
+        
+        maxlen=max(maxlen,tmp);
+        
+    }
+	cout<<maxlen<<endl;
+	system("pause");
+	return 0;
+}
+ 
