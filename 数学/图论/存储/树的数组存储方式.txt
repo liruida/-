@@ -1,0 +1,24 @@
+二叉树的存储方式和遍历方式
+https://blog.csdn.net/simplehap/article/details/63259845
+
+https://blog.csdn.net/qq_32228189/article/details/53040566
+
+https://www.cnblogs.com/hustdc/p/7998234.html
+
+https://blog.csdn.net/zhangwang010/article/details/73415966
+
+父节点i的左子节点在位置(2*i); 
+父节点i的右子节点在位置(2*i+1); 
+子节点i的父节点在位置(i/2);
+
+数组模拟二叉树之P1030 求先序排列
+https://blog.csdn.net/hzg0226/article/details/77509958
+
+进阶
+https://blog.csdn.net/a1323933782/article/details/53698473
+
+https://blog.csdn.net/qq_34594236/article/details/63256002
+
+https://blog.csdn.net/hzg0226/article/details/77509633
+二叉树中找寻 节点和 为某个值的路径
+https://blog.csdn.net/anialy/article/details/8197371
